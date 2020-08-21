@@ -28,18 +28,19 @@ class Product(db.Model):
     minimum_price = db.Column(db.Integer, nullable=False)
     image_file = db.Column(db.String(30), nullable=False, default='default.jpg')
     added_on = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    product_stock = db.relationship('ProductStock', backref='product', lazy=True)
+    product_stock = db.relationship('ProductStock', backref='product', uselist=False)
+    order_item = db.relationship('ProductStock', backref='ordered_product')
 
     def __repr__(self):
         return f"Product('{self.article_no}', '{self.title}', '{self.price}')"
 
 class ProductStock(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    article_no = db.Column(db.String(20), db.ForeignKey('product.article_no'))
     small = db.Column(db.Integer, nullable=False)
     medium = db.Column(db.Integer, nullable=False)
     large = db.Column(db.Integer, nullable=False)
     xlarge = db.Column(db.Integer, nullable=False)
+    article_no = db.Column(db.String(20), db.ForeignKey('product.article_no'))
 
     def __repr__(self):
         return f"ProductStock('{self.article_no}', '{self.small}', '{self.medium}')"
@@ -51,18 +52,19 @@ class Order(db.Model):
     amount = db.Column(db.Integer, nullable=False)
     customer = db.Column(db.Integer, nullable=False)
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    order_item = db.relationship('OrderItem', backref='item', lazy=True)
+    order_items = db.relationship('OrderItem', backref='ordered_item')
 
     def __repr__(self):
         return f"Order('{self.id}', '{self.order_status}', '{self.amount}')"
 
 class OrderItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    item = db.Column(db.String(20), nullable=False)
+    article_no = db.Column(db.String(20), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Integer, nullable=False)
     discounted_price = db.Column(db.Integer, nullable=False)
-
+    order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
+    
     def __repr__(self):
-        return f"OrderItem('{self.id}', '{self.item}', '{self.discounted_price}')"
+        return f"OrderItem('{self.id}', '{self.article_no}', '{self.discounted_price}')"
 
