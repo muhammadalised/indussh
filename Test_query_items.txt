@@ -1,0 +1,9 @@
+from indussh import db
+from indussh.models import User, Product, ProductStock, Order, OrderItem
+db.create_all()
+
+1) User(username='ali5', email='ali@indussh.co.pk', password='123456')
+2) Product(article_no='pr001', title = 'Graphic T-shirt', description='Fine combed cotton graphic t-shirt', type='garments', category='men', price='1299', minimum_price = 800)
+3) ProductStock(small=20, medium=20, large=20, xlarge=20, product=product1)
+4) Order(order_status='pending', amount=800, customer=1)
+5) OrderItem(product_id='pr001', quantity=2, price=1299, discounted_price=900, order_id=order1)
