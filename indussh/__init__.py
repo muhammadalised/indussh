@@ -1,15 +1,13 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
-from indussh.config import Config
+from indussh.config import DevelopmentConfig, ProductionConfig
 
 
-app = Flask(__name__)
+def create_app(config_class=DevelopmentConfig):
+    app = Flask(__name__)
+    app.config.from_object(DevelopmentConfig)
+    db = SQLAlchemy(app)
+    bcrypt =  Bcrypt(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQLALCHEMY_DATABASE_URI
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db = SQLAlchemy(app)
-bcrypt =  Bcrypt(app)
-login_manager = LoginManager(app)
+    return app
