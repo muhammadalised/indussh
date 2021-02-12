@@ -10,61 +10,69 @@ def load_user(user_id):
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
+    email = db.Column(db.String(60), unique=True, nullable=False)
+    image_file = db.Column(db.String(20), default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False, nullable=False)
+
+    customer = db.relationship('Customer', backref='user', uselist=False)
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
 
+class Customer(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(60), unique=True, nullable=False)
+    address = db.Column(db.String(500), nullable=False)
+    city = db.Column(db.String(50), nullable=False)
+    postcode = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(50), nullable=False, unique=True)
+
+    orders = db.relationship('Order', backref='customer')
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     article_no = db.Column(db.String(20), nullable=False, unique=True)
-    title = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    type = db.Column(db.String(25), nullable=False)
     category = db.Column(db.String(25), nullable=False)
+    gender = db.Column(db.String(25), nullable=False)
     price = db.Column(db.Integer, nullable=False)
     minimum_price = db.Column(db.Integer, nullable=False)
     image_file = db.Column(db.String(30), nullable=False, default='default.jpg')
     added_on = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    product_stock = db.relationship('ProductStock', backref='product', uselist=False)
-    order_item = db.relationship('ProductStock', backref='ordered_product')
+    size_sm = db.Column(db.Integer, nullable=False)
+    size_md = db.Column(db.Integer, nullable=False)
+    size_l = db.Column(db.Integer, nullable=False)
+    size_xl = db.Column(db.Integer, nullable=False)
+
+    ordered_items = db.relationship('OrderItem', backref='ordered-products')
+
 
     def __repr__(self):
         return f"Product('{self.article_no}', '{self.title}', '{self.price}')"
 
-class ProductStock(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    small = db.Column(db.Integer, nullable=False)
-    medium = db.Column(db.Integer, nullable=False)
-    large = db.Column(db.Integer, nullable=False)
-    xlarge = db.Column(db.Integer, nullable=False)
-    article_no = db.Column(db.String(20), db.ForeignKey('product.article_no'))
-
-    def __repr__(self):
-        return f"ProductStock('{self.article_no}', '{self.small}', '{self.medium}')"
-
-
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    order_status = db.Column(db.String(20), nullable=False)
     amount = db.Column(db.Integer, nullable=False)
-    customer = db.Column(db.Integer, nullable=False)
-    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    order_items = db.relationship('OrderItem', backref='ordered_item')
+    completed = db.Column(db.Boolean, default=False)
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    date_completed = db.Column(db.DateTime)
+
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
+    order_items = db.relationship('OrderItem', backref='order')
 
     def __repr__(self):
-        return f"Order('{self.id}', '{self.order_status}', '{self.amount}')"
+        return f"Order('{self.id}', '{self.completed}', '{self.amount}')"
 
 class OrderItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    article_no = db.Column(db.String(20), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
-    price = db.Column(db.Integer, nullable=False)
     discounted_price = db.Column(db.Integer, nullable=False)
-    order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
-    
-    def __repr__(self):
-        return f"OrderItem('{self.id}', '{self.article_no}', '{self.discounted_price}')"
 
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
+
+    def __repr__(self):
+        return f"OrderItem('{self.id}', '{self.quantity}', '{self.discounted_price}')"

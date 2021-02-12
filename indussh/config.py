@@ -1,6 +1,16 @@
 import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Get the base directory
+basepath = Path()
+basedir = str(basepath.cwd())
+# Load the environment variables
+envars = basepath.cwd() / '.env'
+load_dotenv(envars)
+
 class Config:
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URI") # mysql://username:password@server/db
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL") # mysql://username:password@server/db
 
 class ProductionConfig(Config):
     DEBUG = False
