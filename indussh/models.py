@@ -1,11 +1,11 @@
-from indussh import db, login_manager
+from indussh import db#, login_manager
 from flask import current_app
 from flask_login import UserMixin
 from datetime import datetime
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
+# @login_manager.user_loader
+# def load_user(user_id):
+#     return User.query.get(int(user_id))
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -33,7 +33,7 @@ class Customer(db.Model):
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    article_no = db.Column(db.String(20), nullable=False, unique=True)
+    article_no = db.Column(db.String(8), nullable=False, unique=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
     category = db.Column(db.String(25), nullable=False)
@@ -41,11 +41,11 @@ class Product(db.Model):
     price = db.Column(db.Integer, nullable=False)
     minimum_price = db.Column(db.Integer, nullable=False)
     image_file = db.Column(db.String(30), nullable=False, default='default.jpg')
-    added_on = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     size_sm = db.Column(db.Integer, nullable=False)
     size_md = db.Column(db.Integer, nullable=False)
     size_l = db.Column(db.Integer, nullable=False)
     size_xl = db.Column(db.Integer, nullable=False)
+    added_on = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     ordered_items = db.relationship('OrderItem', backref='ordered-products')
 

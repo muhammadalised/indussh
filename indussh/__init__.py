@@ -6,7 +6,7 @@ from indussh.config import DevelopmentConfig
 
 db = SQLAlchemy()
 bcrypt =  Bcrypt()
-login_manager = LoginManager()
+# login_manager = LoginManager()
 
 def create_app():
     
@@ -15,6 +15,10 @@ def create_app():
     
     db.init_app(app)
     bcrypt.init_app(app)
-    login_manager.init_app(app)
+    # login_manager.init_app(app)
+
+    from indussh.shop.routes import shop
+
+    app.register_blueprint(shop)
 
     return app

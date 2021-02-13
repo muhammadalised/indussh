@@ -2,10 +2,10 @@
     <div class="container">
       <ul class="site-menu js-clone-nav d-none d-md-block">
         <li {% if active_page == 'home' %} class="active" {% endif %}>
-          <a href="/">Home</a>
+          <a href="{{ url_for('shop.index') }}">Home</a>
         </li>
         <li class="{% if active_page == 'about' %} active {% endif %}">
-          <a href="/about">About</a>
+          <a href="{{ url_for('shop.about') }}">About</a>
           <!--
                <ul class="dropdown">
                 <li><a href="#">Menu One</a></li>
@@ -16,7 +16,7 @@
        
         </li>
         <li class="has-children {% if active_page == 'shop' %} active {% endif %}">
-          <a href="/shop">Shop</a>
+          <a href="{{ url_for('shop.index') }}">Shop</a>
           <ul class="dropdown">
               <li><a href="/shop/men">Men</a></li>
               <li><a href="/shop/women">Women</a></li>
@@ -36,7 +36,7 @@
         </li>
         <!-- <li><a href="#">Catalogue</a></li>
         <li><a href="#">New Arrivals</a></li> -->
-        <li {% if active_page == 'contact' %} class="active" {% endif %}><a href="/contact">Contact</a></li>
+        <li {% if active_page == 'contact' %} class="active" {% endif %}><a href="{{ url_for('shop.contact') }}">Contact</a></li>
       </ul>
     </div>
   </nav>
