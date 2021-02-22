@@ -36,8 +36,8 @@ class Product(db.Model):
     article_no = db.Column(db.String(8), nullable=False, unique=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
+    type = db.Column(db.String(25), nullable=False)
     category = db.Column(db.String(25), nullable=False)
-    gender = db.Column(db.String(25), nullable=False)
     price = db.Column(db.Integer, nullable=False)
     minimum_price = db.Column(db.Integer, nullable=False)
     image_file = db.Column(db.String(30), nullable=False, default='default.jpg')
@@ -51,7 +51,7 @@ class Product(db.Model):
 
 
     def __repr__(self):
-        return f"Product('{self.article_no}', '{self.title}', '{self.price}')"
+        return f"Product('{self.article_no}', '{self.name}', '{self.price}')"
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)

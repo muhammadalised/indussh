@@ -5,7 +5,7 @@
     <div class="bg-light py-3">
       <div class="container">
         <div class="row">
-          <div class="col-md-12 mb-0"><a href="index.html">Home</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Shop</strong></div>
+          <div class="col-md-12 mb-0"><a href="{{ url_for('main.index') }}">Home</a><span class="mx-2 mb-0">/</span><strong class="text-black">Shop</strong><span class="mx-2 mb-0">/</span><strong class="text-black">{{category|title}}</strong></div>
         </div>
       </div>
     </div>
@@ -18,16 +18,17 @@
 
             <div class="row">
               <div class="col-md-12 mb-5">
-                <div class="float-md-left mb-4"><h2 class="text-black h5">Shop All</h2></div>
+                <div class="float-md-left mb-4"><h2 class="text-black h5">Shop {{ category|title }}</h2></div>
                 <div class="d-flex">
                   <div class="dropdown mr-1 ml-md-auto">
                     <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" id="dropdownMenuOffset" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       Latest
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuOffset">
-                      <a class="dropdown-item" href="/shop/men">Men</a>
-                      <a class="dropdown-item" href="/shop/women">Women</a>
-                      <a class="dropdown-item" href="/shop/kids">Children</a>
+                      <a class="dropdown-item" href="{{ url_for('products.shop_by_category', category='men') }}">Men</a>
+                      <a class="dropdown-item" href="{{ url_for('products.shop_by_category', category='women') }}">Women</a>
+                      <a class="dropdown-item" href="{{ url_for('products.shop_by_category', category='boys') }}">Boys</a>
+                      <a class="dropdown-item" href="{{ url_for('products.shop_by_category', category='girls') }}">Girls</a>
                     </div>
                   </div>
                   <div class="btn-group">
@@ -46,19 +47,19 @@
             </div>
           <div class="row mb-5">
 
-            {% for product in product_rows %}
+            {% for product in products.items %}
               <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
                 <div class="block-4 text-center border">
-                    <!-- <small class="mb-0">Product no: {{ product.article_no }}</small> -->
+                  <!-- <small class="mb-0 text-default">Product no: {{ product.article_no }}</small> -->
                   <figure class="block-4-image">
-                    <a href="{{ url_for('shop_single', prd = product.article_no )}}"><img src="{{ product.image_path }}" alt="Image placeholder" class="img-fluid"></a>
+                    <a href="{{ url_for('products.shop_single', article_no = product.article_no )}}"><img src="{{ url_for('static', filename='uploads/product_images/'+product.image_file) }}" alt="Image placeholder" class="img-fluid"></a>
                   </figure>
                   <div class="block-4-text p-4">
-                    <h6><a href="{{ url_for('shop_single', prd = product.article_no )}}">{{ product.prd_name }}</a></h6>
+                    <h6><a href="{{ url_for('products.shop_single', article_no = product.article_no )}}">{{ product.name }}</a></h6>
                     <p class="mb-0"></p>
-                    <p class="text-danger font-weight-bold"><span class="icon icon-tag"></span>Rs. {{product.prd_price}}/-</p>
+                    <p class="text-danger font-weight-bold"><span class="icon icon-tag"></span>Rs. {{product.price}}/-</p>
 
-                    <a href=" {{ url_for('shop_single', prd = product.article_no )}}" class="btn btn-primary btn-icon-split btn-sm">
+                    <a href="{{ url_for('products.shop_single', article_no = product.article_no )}}" class="btn btn-primary btn-icon-split btn-sm">
                       <span class="icon text-white-50">
                         <i class="fas fa-shopping-bag"></i>
                       </span>
@@ -71,20 +72,24 @@
           </div>
 
           <div class="row" data-aos="fade-up">
-              <div class="col-md-12 text-center">
-                <div class="site-block-27">
-                  <ul>
-                    <li><a href="#">&lt;</a></li>
-                    {% for page_num in range(num_of_pages) %}
-                      <li class = "{% if request.args.get('page')|int == page_num+1 %}  active {% endif %}">
-                        <a href="{{ url_for('shop_kids', page=page_num+1) }}">{{page_num+1}}</a>
-                      </li>
+            <div class="col-md-12 text-center">
+              <div class="site-block-27">
+                <ul>
+                    {% for page_num in products.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=4) %}
+                      {% if page_num %}
+                        {% if products.page == page_num %}
+                          <a class="btn btn-primary mb-4" href="{{ url_for('products.shop_by_category', category=category, page=page_num) }}">{{ page_num }}</a>
+                        {% else %}
+                          <a class="btn btn-outline-primary mb-4" href="{{ url_for('products.shop_by_category', category=category, page=page_num) }}">{{ page_num }}</a>
+                        {% endif %}
+                      {% else %}
+                        ...
+                      {% endif %}
                     {% endfor %}
-                    <li><a href="#">&gt;</a></li>
-                  </ul>
-                </div>
+                </ul>
               </div>
             </div>
+          </div>
             
           </div>
 
@@ -92,9 +97,10 @@
             <div class="border p-4 rounded mb-4">
               <h3 class="mb-3 h6 text-uppercase text-black d-block">Categories</h3>
               <ul class="list-unstyled mb-0">
-                <li class="mb-1"><a href="/shop/men" class="d-flex"><span>Men</span> <span class="text-black ml-auto"></span></a></li>
-                <li class="mb-1"><a href="/shop/women" class="d-flex"><span>Women</span> <span class="text-black ml-auto"></span></a></li>
-                <li class="mb-1"><a href="/shop/kids" class="d-flex"><span>Children</span> <span class="text-black ml-auto"></span></a></li>
+                <li class="mb-1"><a href="{{ url_for('products.shop_by_category', category='men') }}" class="d-flex"><span>Men</span> <span class="text-black ml-auto"></span></a></li>
+                <li class="mb-1"><a href="{{ url_for('products.shop_by_category', category='women') }}" class="d-flex"><span>Women</span> <span class="text-black ml-auto"></span></a></li>
+                <li class="mb-1"><a href="{{ url_for('products.shop_by_category', category='boys') }}" class="d-flex"><span>Boys</span> <span class="text-black ml-auto"></span></a></li>
+                <li class="mb-1"><a href="{{ url_for('products.shop_by_category', category='girls') }}" class="d-flex"><span>Girls</span> <span class="text-black ml-auto"></span></a></li>
               </ul>
             </div>
 
@@ -159,7 +165,7 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-sm-6 col-md-6 col-lg-4 mb-4 mb-lg-0" data-aos="fade" data-aos-delay="">
+                  <div class="col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0" data-aos="fade" data-aos-delay="">
                     <a class="block-2-item" href="#">
                       <figure class="image">
                         <img src="../static/images/women.jpg" alt="" class="img-fluid">
@@ -170,18 +176,7 @@
                       </div>
                     </a>
                   </div>
-                  <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
-                    <a class="block-2-item" href="#">
-                      <figure class="image">
-                        <img src="../static/images/children.jpg" alt="" class="img-fluid">
-                      </figure>
-                      <div class="text">
-                        <span class="text-uppercase">Collections</span>
-                        <h3>Children</h3>
-                      </div>
-                    </a>
-                  </div>
-                  <div class="col-sm-6 col-md-6 col-lg-4 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="200">
+                  <div class="col-sm-6 col-md-6 col-lg-3 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="200">
                     <a class="block-2-item" href="#">
                       <figure class="image">
                         <img src="../static/images/men.jpg" alt="" class="img-fluid">
@@ -189,6 +184,28 @@
                       <div class="text">
                         <span class="text-uppercase">Collections</span>
                         <h3>Men</h3>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="col-sm-6 col-md-6 col-lg-3 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
+                    <a class="block-2-item" href="#">
+                      <figure class="image">
+                        <img src="../static/images/boys.jpg" alt="" class="img-fluid">
+                      </figure>
+                      <div class="text">
+                        <span class="text-uppercase">Collections</span>
+                        <h3>Boys</h3>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="col-sm-6 col-md-6 col-lg-3 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
+                    <a class="block-2-item" href="#">
+                      <figure class="image">
+                        <img src="../static/images/girls.jpg" alt="" class="img-fluid">
+                      </figure>
+                      <div class="text">
+                        <span class="text-uppercase">Collections</span>
+                        <h3>Girls</h3>
                       </div>
                     </a>
                   </div>

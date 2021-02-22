@@ -6,9 +6,9 @@
     <div class="bg-light py-3">
       <div class="container">
         <div class="row">
-          <div class="col-md-12 mb-0"><a href="/">Home</a> <span class="mx-2 mb-0">/</span>
-             <strong class="text-black"><a href="/shop">{{active_page.capitalize()}}</a></strong><span class="mx-2 mb-0">/</span> 
-             <strong class="text-black">{{product.prd_name}}</strong>
+          <div class="col-md-12 mb-0"><a href="{{ url_for('main.index') }}">Home</a> <span class="mx-2 mb-0">/</span>
+             <strong class="text-black"><a href="{{ url_for('products.shop') }}">{{ active_page.capitalize() }}</a></strong><span class="mx-2 mb-0">/</span> 
+             <strong class="text-black">{{product.name}}</strong>
           </div>
         </div>
       </div>
@@ -18,13 +18,13 @@
       <div class="container">
         <div class="row">
           <div class="col-md-6">
-            <img src="{{ product.image_path }}" alt="Image" class="img-fluid" >
+            <img src="{{ url_for('static', filename='uploads/product_images/'+product.image_file) }}" alt="Image" class="img-fluid" >
           </div>
           <div class="col-md-6">
-            <h2 class="text-black">{{ product.prd_name}} </h2>
-            <p>{{ product.prd_description }}</p>
+            <h2 class="text-black">{{ product.name}} </h2>
+            <p>{{ product.description }}</p>
             <!-- <p class="mb-4">Ex numquam veritatis debitis minima quo error quam eos dolorum quidem perferendis. Quos repellat dignissimos minus, eveniet nam voluptatibus molestias omnis reiciendis perspiciatis illum hic magni iste, velit aperiam quis.</p> -->
-            <p><strong class="text-primary h4">Rs. {{ product.prd_price }}</strong></p>
+            <p><strong class="text-primary h4">Rs. {{ product.price }}</strong></p>
             <form class="user" id="cartform" method="POST" action="">
               <input type="hidden" name="article_no" value="{{ product.article_no }}" id="article_no">
               <div class="mb-1 d-flex">
@@ -32,10 +32,10 @@
                       <span class="d-inline-block text-black">Select Size</span>
                       <select class="form-control" name="size" id="size">
                         <option value="nosize">Select Your Size</option>
-                        {% if product.size_s >= 1 %} <option value="size_s">Small</option> {% endif %}
-                        {% if product.size_m >= 1 %} <option value="size_m">Medium</option> {% endif %}
-                        {% if product.size_l >= 1 %} <option value="size_l">Large</option> {% endif %}
-                        {% if product.size_xl >= 1 %} <option value="size_xl">X-Large</option> {% endif %}
+                        {% if product.size_sm >= 1 %} <option value="small">Small</option> {% endif %}
+                        {% if product.size_md >= 1 %} <option value="medium">Medium</option> {% endif %}
+                        {% if product.size_l >= 1 %} <option value="large">Large</option> {% endif %}
+                        {% if product.size_xl >= 1 %} <option value="xlarge">X-Large</option> {% endif %}
                       </select>
                   </div>
               </div>
@@ -46,7 +46,7 @@
                     <div class="input-group-prepend">
                       <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
                     </div>
-                    <input type="text" class="form-control text-center" id="quantity" name="quantity" value="0" placeholder="">
+                    <input type="text" class="form-control text-center" id="quantity" name="quantity" type="number" value=0 placeholder="">
                     <div class="input-group-append">
                       <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
                     </div>
@@ -87,16 +87,16 @@
             <div class="nonloop-block-3 owl-carousel">
               {% for p in products %}
                 {% for rec in recommendations %}
-                  {% if rec[1] in p.article_no and p.prd_category == product.prd_category %}
+                  {% if rec[1] in p.article_no and p.category == product.category %}
                     <div class="item">
                       <div class="block-4 text-center">
                         <figure class="block-4-image">
-                          <a href="{{ url_for('shop_single', prd = p.article_no )}}"><img src="{{p.image_path}}" alt="{{ p.prd_name }}" class="img-fluid"></a>
+                          <a href="{{ url_for('products.shop_single',article_no = p.article_no )}}"><img src="{{ url_for('static', filename='uploads/product_images/'+p.image_file) }}" alt="{{ p.name }}" class="img-fluid"></a>
                         </figure>
                         <div class="block-4-text p-4">
-                          <h3><a href="{{ url_for('shop_single', prd = p.article_no )}}">{{ p.prd_name }}</a></h3>
-                          <p class="mb-0">{{p.prd_category}}</p>
-                          <p class="text-primary font-weight-bold">Rs. {{p.prd_price}}</p>
+                          <h3><a href="{{ url_for('shop_single', prd = p.article_no )}}">{{ p.name }}</a></h3>
+                          <p class="mb-0">{{p.category}}</p>
+                          <p class="text-primary font-weight-bold">Rs. {{p.price}}</p>
                         </div>
                       </div>
                     </div>
@@ -128,13 +128,13 @@
                 <div class="block-2 col-sm-12 text-center">
                     <br>
                     <figure class="block-2-image">
-                      <img src="{{ product.image_path }}" alt="Image placeholder" class="img-fluid">
+                      <img src="{{ url_for('static', filename='uploads/product_images/'+product.image_file) }}" alt="Image placeholder" class="img-fluid">
                     </figure>
                     <div class="block-2-text p-2">
                       
-                      <h6>{{ product.prd_name }}</h6>
-                      <p>{{ product.prd_description }}</p>
-                      <p class="text-danger font-weight-bold"><span class="icon icon-tag"></span>Rs. {{product.prd_price}}/-</p>
+                      <h6>{{ product.name }}</h6>
+                      <p>{{ product.description }}</p>
+                      <p class="text-danger font-weight-bold"><span class="icon icon-tag"></span>Rs. {{ product.price }}/-</p>
                   
                     </div>
                 </div>

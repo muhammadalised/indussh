@@ -4,23 +4,23 @@
     <title>INDUS &mdash; An AI Powered Ecommerce Platform</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="../static/css/chatstyle.css">
-    <link rel="icon" href="../static/images/favicon.PNG" type="image/gif" sizes="5x5">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chatstyle.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.PNG') }}" type="image/gif" sizes="5x5">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:300,400,700"> 
-    <link rel="stylesheet" href="../static/fonts/icomoon/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='fonts/icomoon/style.css') }}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/css/magnific-popup.css">
-    <link rel="stylesheet" href="../static/css/jquery-ui.css">
-    <link rel="stylesheet" href="../static/css/owl.carousel.min.css">
-    <link rel="stylesheet" href="../static/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/magnific-popup.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/owl.theme.default.min.css') }}">
 
     
 
-    <link rel="stylesheet" href="../static/css/aos.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/aos.css') }}">
 
-    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     
     <script>
         if(window.history.replaceState){
@@ -45,7 +45,7 @@
 
             <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
               <div class="site-logo">
-                <a href="/" class="js-logo-clone">INDUS</a>
+                <a href="{{ url_for('main.index')}}" class="js-logo-clone">INDUS</a>
               </div>
             </div>
 
@@ -54,7 +54,7 @@
                 <ul>
                   <li><a href="#" data-toggle="modal" data-target="#myModal"><span class="icon icon-person"></span></a></li>
                   <li>
-                    <a href="/cart" class="site-cart">
+                    <a href="{{ url_for('products.cart') }}" class="site-cart">
                       <span class="icon icon-shopping_cart"></span>
                       {% if session.cart|length > 0 %}
                         <span class="count">{{ session.cart | length }}</span>
@@ -151,7 +151,7 @@
             <div class="col-md-6 col-lg-3 mb-4 mb-lg-0">
               <h3 class="footer-heading mb-4">Promo</h3>
               <a href="#" class="block-6">
-                <img src="../static/images/hero_1.jpg" alt="Image placeholder" class="img-fluid rounded mb-4">
+                <img src="{{ url_for('static', filename='images/hero_1.jpg') }}" alt="Image placeholder" class="img-fluid rounded mb-4">
                 <h3 class="font-weight-light  mb-0">Finding Your Perfect Shoes</h3>
                 <p>Promo from  January 15 &mdash; 25, 2019</p>
               </a>
@@ -191,15 +191,15 @@
     </div>
 
 
-    <script src="../static/js/jquery-3.3.1.min.js"></script>
-    <script src="../static/js/jquery-ui.js"></script>
-    <script src="../static/js/popper.min.js"></script>
-    <script src="../static/js/bootstrap.min.js"></script>
-    <script src="../static/js/owl.carousel.min.js"></script>
-    <script src="../static/js/jquery.magnific-popup.min.js"></script>
-    <script src="../static/js/aos.js"></script>
+    <script src="{{ url_for('static', filename = 'js/jquery-3.3.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'js/jquery-ui.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'js/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'js/owl.carousel.min.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'js/jquery.magnific-popup.min.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'js/aos.js') }}"></script>
   
-    <script src="../static/js/main.js"></script>
+    <script src="{{ url_for('static', filename = 'js/main.js') }}"></script>
     <script src="{{ url_for('static', filename = 'js/cart.js') }}"></script>
     
     <script>

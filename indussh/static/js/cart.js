@@ -7,7 +7,7 @@ $(document).ready(function(){
                 quantity: $('#quantity').val()
             },
             type: 'POST',
-            url : '/shop/products/addtocart'
+            url : '/shop/addtocart'
         })
         .done(function(data){
             if(data.error){

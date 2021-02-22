@@ -1,4 +1,5 @@
 import random
+from flask import session
 
 def generate_upc():
 	upc = ''

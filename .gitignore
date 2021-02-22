@@ -140,3 +140,4 @@ cython_debug/
 .vscode/
 
 Test_query_items.txt
+flask_session

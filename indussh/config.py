@@ -11,15 +11,16 @@ load_dotenv(envars)
 
 class Config:
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL") # mysql://username:password@server/db
+    SESSION_TYPE=os.environ.get('SESSION_TYPE')
 
 class ProductionConfig(Config):
     DEBUG = False
-    SECRET_KEY = '5d15034ccb53145cc8fb6b1bddc0c400'
+    SECRET_KEY = os.environ.get('SECRET_KEY')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 class DevelopmentConfig(Config):
     ENV = "development"
     DEVELOPMENT = True
-    SECRET_KEY = "secret_for_test_environment"
+    SECRET_KEY = os.environ.get('SECRET_KEY')
     OAUTHLIB_INSECURE_TRANSPORT = True
     SQLALCHEMY_TRACK_MODIFICATIONS = False

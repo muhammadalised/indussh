@@ -5,7 +5,7 @@
     <div class="bg-light py-3">
       <div class="container">
         <div class="row">
-          <div class="col-md-12 mb-0"><a href="index.html">Home</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Cart</strong></div>
+          <div class="col-md-12 mb-0"><a href="{{ url_for('main.index') }}">Home</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Cart</strong></div>
         </div>
       </div>
     </div>
@@ -20,6 +20,7 @@
                   <tr>
                     <th class="product-thumbnail">Image</th>
                     <th class="product-name">Product</th>
+                    <th class="product-name">Size</th>
                     <th class="product-price">Price</th>
                     <th class="product-price">Disc. Price</th>
                     <th class="product-quantity">Quantity</th>
@@ -29,15 +30,15 @@
                 </thead>
                 <tbody>
                   {% for product in products %}
-                    {% if product.article_no in session.cart %}
                         <tr>
                           <td class="product-thumbnail">
-                            <img src="{{product.image_path}}" alt="Image" class="img-fluid">
+                            <img src="{{ url_for('static', filename='uploads/product_images/'+product.image_file) }}" alt="Image" class="img-fluid">
                           </td>
                           <td class="product-name">
-                            <h2 class="h5 text-black">{{ product.prd_name }}</h2>
+                            <h2 class="h5 text-black">{{ product.name }}</h2>
                           </td>
-                          <td>{{ product.prd_price }}</td>
+                          <td>{{ session.cart[product.article_no][1]|title }}</td>
+                          <td>{{ product.price }}</td>
                           <td>
                             <!-- discounted price -->
                               {{ session.cart[product.article_no][2] }}
@@ -48,16 +49,16 @@
                           {% if session.cart[product.article_no][2]|int != 0 %}
                             <td>{{ session.cart[product.article_no][0]|int * session.cart[product.article_no][2]|int }}</td>
                           {% else %}
-                            <td>{{ session.cart[product.article_no][0]|int * product.prd_price|int }}</td>
+                            <td>{{ session.cart[product.article_no][0]|int * product.price|int }}</td>
                           {% endif %}
                           <td>
-                            <form id="remove_item" action="{{url_for('remove_cart_item', article_no=product.article_no)}}" method="POST">
+                            <!-- <form id="remove_item" action="{{url_for('products.remove_from_cart', article_no=product.article_no)}}" method="POST">
                               <input type="hidden" name="_method" value="DELETE">
                               <input type="submit" class="btn btn-danger btn-sm" value="X" >
-                            </form>
+                            </form> -->
+                            <a class="btn btn-danger btn-sm" role="button" href="{{url_for('products.remove_from_cart', article_no=product.article_no)}}">X</a>
                           </td>
                         </tr>
-                      {% endif%}
                   {% endfor %}
 
                 </tbody>
@@ -70,7 +71,7 @@
           <div class="col-md-6">
             <div class="row mb-5">
               <div class="col-md-6">
-                <a href="/shop" class="btn btn-outline-primary btn-sm btn-block">Continue Shopping</a>
+                <a href="{{ url_for('products.shop') }}" class="btn btn-outline-primary btn-sm btn-block">Continue Shopping</a>
               </div>
             </div>
             <!-- <div class="row">
@@ -100,7 +101,7 @@
                       <span class="text-black">Subtotal</span>
                     </div>
                     <div class="col-md-6 text-right">
-                      <strong class="text-black">Rs. {{ session.total_amount }}</strong>
+                      <strong class="text-black">Rs. {{ total }}</strong>
                     </div>
                   </div>
                   <div class="row mb-5">
@@ -108,7 +109,7 @@
                       <span class="text-black">Total</span>
                     </div>
                     <div class="col-md-6 text-right">
-                      <strong class="text-black">Rs. {{ session.total_amount }}</strong>
+                      <strong class="text-black">Rs. {{ total }}</strong>
                     </div>
                   </div>
 
