@@ -76,7 +76,6 @@ def calculate_total_amount(products):
     
     return total_amount
     # session.pop('discount_price', None)
-    # session['total_amount'] = total_amount
 
 @products.route('/shop/removecartitem/<string:article_no>')
 def remove_from_cart(article_no):
@@ -85,3 +84,17 @@ def remove_from_cart(article_no):
         if len(session['cart'].items()) <= 0:
             session.clear()
         return redirect(url_for('products.cart'))
+
+
+@products.route('/shop/checkout')
+def checkout():
+     if 'cart' in session:
+        cart_prods = list(session['cart'].keys())
+        products = Product.query.filter(Product.article_no.in_(cart_prods)).all()
+        total = int(calculate_total_amount(products))
+   # prepare_order()
+        return render_template('checkout.html', products=products, total=total)
+
+@products.route('/shop/completed')
+def thanks():
+    return render_template('thankyou.html')
