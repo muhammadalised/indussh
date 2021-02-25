@@ -9,7 +9,6 @@ from datetime import datetime
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(60), unique=True, nullable=False)
     image_file = db.Column(db.String(20), default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
@@ -22,14 +21,16 @@ class User(db.Model, UserMixin):
 
 class Customer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(60), unique=True, nullable=False)
+    name = db.Column(db.String(60), nullable=False)
     address = db.Column(db.String(500), nullable=False)
     city = db.Column(db.String(50), nullable=False)
     postcode = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(50), nullable=False, unique=True)
+    phone_number = db.Column(db.String(20))
 
-    orders = db.relationship('Order', backref='customer')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    orders = db.relationship('Order', backref='customer')
+    
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -62,6 +63,8 @@ class Order(db.Model):
 
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
     order_items = db.relationship('OrderItem', backref='order')
+
+    notes = db.Column(db.Text)
 
     def __repr__(self):
         return f"Order('{self.id}', '{self.completed}', '{self.amount}')"

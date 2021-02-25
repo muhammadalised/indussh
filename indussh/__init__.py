@@ -22,8 +22,10 @@ def create_app():
 
     from indussh.main.routes import main
     from indussh.products.routes import products
+    from indussh.users.routes import users
 
     app.register_blueprint(main)
     app.register_blueprint(products)
+    app.register_blueprint(users)
 
     return app

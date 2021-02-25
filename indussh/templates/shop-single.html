@@ -67,7 +67,9 @@
           </form>
           <br><br>
           
-          <div id="successAlert" class="alert alert-success" role="alert" style="display:none;"></div>
+          <div id="successAlert" class="alert alert-success" role="alert" style="display:none;">
+            <a href="{{ url_for('products.cart') }}" class="text text-muted text-small">Click here to go to cart.</a>
+          </div>
           <div id="errorAlert" class="alert alert-danger" role="alert" style="display:none;"></div>
 
           </div>
