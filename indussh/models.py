@@ -14,8 +14,6 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     is_admin = db.Column(db.Boolean, default=False, nullable=False)
 
-    customer = db.relationship('Customer', backref='user', uselist=False)
-
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
 
@@ -28,7 +26,6 @@ class Customer(db.Model):
     email = db.Column(db.String(50), nullable=False, unique=True)
     phone_number = db.Column(db.String(20))
 
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     orders = db.relationship('Order', backref='customer')
     
 

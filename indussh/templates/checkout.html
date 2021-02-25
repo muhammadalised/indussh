@@ -11,14 +11,6 @@
 
 <div class="site-section">
   <div class="container">
-    <div class="row mb-5">
-      <div class="col-md-12">
-        <div class="border p-4 rounded" role="alert">
-          Returning customer? <a href="#">Click here</a> to login
-        </div>
-      </div>
-    </div>
-
     <form method="POST">
       {{ form.hidden_tag() }}
       <div class="row">
@@ -112,41 +104,6 @@
                 {% else %}
                   {{ form.phone_number(class="form-control", placeholder="Phone Number") }}
                 {% endif %}
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="c_create_account" class="text-black" data-toggle="collapse" href="#create_an_account" role="button" aria-expanded="false" aria-controls="create_an_account"><input type="checkbox" name="c_create_account" value="1" id="c_create_account"> Create an account?</label>
-              <div class="collapse" id="create_an_account">
-                <div class="py-2">
-                  <p class="mb-3">Create an account by entering the information below. If you are a returning customer please login at the top of the page.</p>
-                  <div class="form-group">
-                    {{ form.password.label(class="text-black") }}<span class="text-danger">*</span>
-                    {% if form.password.errors %}
-                      {{ form.password(class="form-control is-invalid", placeholder="Password") }}
-                    <div class="invalid-feedback">
-                      {% for error in form.password.errors %}
-                        <span>{{ error }}</span>
-                      {% endfor %}
-                    </div>
-                    {% else %}
-                      {{ form.password(class="form-control", placeholder="Password") }}
-                    {% endif %}
-                  </div>
-                  <div class="form-group">
-                    {{ form.confirm_password.label(class="text-black") }}<span class="text-danger">*</span>
-                    {% if form.confirm_password.errors %}
-                      {{ form.confirm_password(class="form-control", placeholder="Confirm Password") }}
-                      <div class="invalid-feedback">
-                        {% for error in form.confirm_password.errors %}
-                          <span>{{ error }}</span>
-                        {% endfor %}
-                      </div>
-                    {% else %}
-                      {{ form.confirm_password(class="form-control", placeholder="Confirm Password") }}
-                    {% endif %}
-                  </div>
-                </div>
               </div>
             </div>
 

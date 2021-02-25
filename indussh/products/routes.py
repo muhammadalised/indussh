@@ -98,33 +98,15 @@ def checkout():
         form = BillingForm()
 
         if form.validate_on_submit():
-            # If create account is checked
-            if request.form.get('c_create_account'):
-                hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-                user = User(email=form.email.data,
-                            password=hashed_password
-                            )
-                db.session.add(user)
-                db.session.commit()
-
-                customer = Customer(name=form.name.data,
-                                    address=form.address.data,
-                                    city=form.city.data,
-                                    postcode=form.postcode.data,
-                                    email=form.email.data,
-                                    phone_number=form.phone_number.data,
-                                    user_id=user.id
-                                    )
-                db.session.add(customer)
-            else:
-                customer = Customer(name=form.name.data,
-                                    address=form.address.data,
-                                    city=form.city.data,
-                                    postcode=form.postcode.data,
-                                    email=form.email.data,
-                                    phone_number=form.phone_number.data
-                                    )
-                db.session.add(customer)
+            
+            customer = Customer(name=form.name.data,
+                                address=form.address.data,
+                                city=form.city.data,
+                                postcode=form.postcode.data,
+                                email=form.email.data,
+                                phone_number=form.phone_number.data
+                                )
+            db.session.add(customer)
             db.session.commit()
 
             # Create an order

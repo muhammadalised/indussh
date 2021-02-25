@@ -4,25 +4,22 @@
               <div class="text-center">
                 <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
               </div>
-                {% from "shared/_formhelpers.html" import render_field %}
                 <form class="user" method="POST" action="">
                   <div class="form-group">
-                      {{ render_field(form.name, class_="form-control form-control-user") }}
+                      {{ form.name(class="form-control form-control-user", placeholder='Name...') }}
                   </div>
                   <div class="form-group">
-                      {{ render_field(form.email, class_="form-control form-control-user") }}
+                      {{ form.email(class="form-control form-control-user", placeholder='Email...') }}
                   </div>
                   <div class="form-group row">
                     <div class="col-sm-6 mb-3 mb-sm-0">
-                      {{ render_field(form.password, class_="form-control form-control-user") }}
+                      {{ form.password(class="form-control form-control-user", placeholder="Password...") }}
                     </div>
                     <div class="col-sm-6">
-                      {{ render_field(form.confirm_password, class_="form-control form-control-user") }}
+                      {{ form.confirm_password(class="form-control form-control-user", placeholder="Confirm Password...") }}
                     </div>
                   </div>
-                  <button type="submit" class="btn btn-primary btn-user btn-block">
-                    Register Account
-                  </button>
+                  {{ form.submit(class="btn btn-primary btn-user btn-block") }}
                 </form>
               <hr>
               <div class="text-center">

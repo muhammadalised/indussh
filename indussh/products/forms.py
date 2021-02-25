@@ -10,8 +10,6 @@ class BillingForm(FlaskForm):
     postcode = StringField('Zip/Post Code', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     phone_number = StringField('Phone Number', validators=[DataRequired()])
-    password = PasswordField('Password')
-    confirm_password = PasswordField('Confirm Password', validators=[EqualTo('password')])
     notes = TextAreaField('Order Notes')
     
     submit = SubmitField('Place Order')
