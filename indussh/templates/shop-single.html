@@ -87,24 +87,20 @@
         <div class="row">
           <div class="col-md-12">
             <div class="nonloop-block-3 owl-carousel">
-              {% for p in products %}
-                {% for rec in recommendations %}
-                  {% if rec[1] in p.article_no and p.category == product.category %}
+                {% for product in recommendations %}
                     <div class="item">
                       <div class="block-4 text-center">
                         <figure class="block-4-image">
-                          <a href="{{ url_for('products.shop_single',article_no = p.article_no )}}"><img src="{{ url_for('static', filename='uploads/product_images/'+p.image_file) }}" alt="{{ p.name }}" class="img-fluid"></a>
+                          <a href="{{ url_for('products.shop_single',article_no = product.article_no )}}"><img src="{{ url_for('static', filename='uploads/product_images/'+product.image_file) }}" alt="{{ product.name }}" class="img-fluid"></a>
                         </figure>
                         <div class="block-4-text p-4">
-                          <h3><a href="{{ url_for('shop_single', prd = p.article_no )}}">{{ p.name }}</a></h3>
-                          <p class="mb-0">{{p.category}}</p>
-                          <p class="text-primary font-weight-bold">Rs. {{p.price}}</p>
+                          <h3><a href="{{ url_for('products.shop_single', article_no = product.article_no )}}">{{ product.name }}</a></h3>
+                          <p class="mb-0">{{product.category}}</p>
+                          <p class="text-primary font-weight-bold">Rs. {{product.price}}</p>
                         </div>
                       </div>
                     </div>
-                  {% endif %}
                 {% endfor %}
-              {% endfor %}
             </div>
           </div>
         </div>

@@ -1,10 +1,13 @@
 from flask import render_template, redirect, url_for, Blueprint, request, session, jsonify
 from indussh.models import Product, Customer, User, Order, OrderItem
 from indussh.products.forms import BillingForm
+from indussh.products.recommender import Recommender
 from indussh import db, bcrypt
+import pandas as pd
 
 products = Blueprint('products', __name__)
 
+@products.route('/shop/')
 @products.route('/shop')
 def shop():
     page = request.args.get('page', 1, type=int)
@@ -14,7 +17,24 @@ def shop():
 @products.route('/shop/product/<string:article_no>')
 def shop_single(article_no):
     product = Product.query.filter_by(article_no=article_no).first()
-    return render_template('shop-single.html', product=product, recommendations=[])
+
+    prods = pd.read_sql(db.session.query(Product).with_entities(Product.id, 
+                                                                Product.article_no, 
+                                                                Product.name, 
+                                                                Product.description,
+                                                                Product.category).statement, db.session.bind)
+    prods['details'] = prods['name'] + ' ' + prods['category'] + ' ' + prods['description']
+    prods.drop(['name', 'category', 'description'], axis=1, inplace=True)
+
+    recommender = Recommender(prods)
+    recommendation_results = recommender.recommend(article_no, 8)
+    
+    # Get Article no's of recommended products
+    rec_prods_nos = [rec[1] for rec in recommendation_results]
+
+    recommendations = Product.query.filter(Product.article_no.in_(rec_prods_nos)).all()
+
+    return render_template('shop-single.html', product=product, recommendations=recommendations)
 
 @products.route('/shop/<string:category>')
 def shop_by_category(category):
