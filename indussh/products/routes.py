@@ -22,12 +22,14 @@ def shop_single(article_no):
                                                                 Product.article_no, 
                                                                 Product.name, 
                                                                 Product.description,
+                                                                Product.type,
                                                                 Product.category).statement, db.session.bind)
-    prods['details'] = prods['name'] + ' ' + prods['category'] + ' ' + prods['description']
-    prods.drop(['name', 'category', 'description'], axis=1, inplace=True)
+
+    prods['details'] = prods['name'] + ' ' + prods['category'] + ' ' + prods['type'] + ' ' + prods['description']
+    prods.drop(['name', 'category', 'type', 'description'], axis=1, inplace=True)
 
     recommender = Recommender(prods)
-    recommendation_results = recommender.recommend(article_no, 8)
+    recommendation_results = recommender.recommend(article_no, 10)
     
     # Get Article no's of recommended products
     rec_prods_nos = [rec[1] for rec in recommendation_results]
