@@ -1,10 +1,11 @@
 {% extends 'layout.html' %}
 {% set active_page = 'shop' %}
 {% block body %}
+
     <div class="bg-light py-3">
       <div class="container">
         <div class="row">
-          <div class="col-md-12 mb-0"><a href="{{ url_for('main.index') }}">Home</a> <span class="mx-2 mb-0">/</span> <strong class="text-black">Shop</strong></div>
+          <div class="col-md-12 mb-0"><a href="{{ url_for('main.index') }}">Home</a><span class="mx-2 mb-0">/</span><strong class="text-black">Shop</strong><span class="mx-2 mb-0">/</span><strong class="text-black">{{category|title}}</strong></div>
         </div>
       </div>
     </div>
@@ -17,7 +18,7 @@
 
             <div class="row">
               <div class="col-md-12 mb-5">
-                <div class="float-md-left mb-4"><h2 class="text-black h5">Shop All</h2></div>
+                <div class="float-md-left mb-4"><h2 class="text-black h5">Shop {{ category|title }} {{ type|title }}</h2></div>
                 <div class="d-flex">
                   <div class="dropdown mr-1 ml-md-auto">
                     <button type="button" class="btn btn-secondary btn-sm dropdown-toggle" id="dropdownMenuOffset" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -47,24 +48,23 @@
           <div class="row mb-5">
 
             {% for product in products.items %}
-              <div class="col-sm-8 col-lg-4 mb-4" data-aos="fade-up">
+              <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
                 <div class="block-4 text-center border">
-                    <!-- <small class="mb-0">Product no: {{ product.article_no }}</small> -->
+                  <!-- <small class="mb-0 text-default">Product no: {{ product.article_no }}</small> -->
                   <figure class="block-4-image">
-                    <a href="{{ url_for('products.shop_single', article_no = product.article_no )}}"><img src="{{ url_for('static', filename='uploads/product_images/'+product.image_file) }}" alt="{{ product.name }}" class="img-fluid"></a>
+                    <a href="{{ url_for('products.shop_single', article_no = product.article_no )}}"><img src="{{ url_for('static', filename='uploads/product_images/'+product.image_file) }}" alt="Image placeholder" class="img-fluid"></a>
                   </figure>
                   <div class="block-4-text p-4">
-                    
                     <h6><a href="{{ url_for('products.shop_single', article_no = product.article_no )}}">{{ product.name }}</a></h6>
-                    <p class="text-danger font-weight-bold"><span class="icon icon-tag"></span>Rs. {{ product.price }}/-</p>
+                    <p class="mb-0"></p>
+                    <p class="text-danger font-weight-bold"><span class="icon icon-tag"></span>Rs. {{product.price}}/-</p>
 
                     <a href="{{ url_for('products.shop_single', article_no = product.article_no )}}" class="btn btn-primary btn-icon-split btn-sm">
-                        <span class="icon text-white-50">
-                          <i class="fas fa-shopping-bag"></i>
-                        </span>
-                        <span class="text">Bargain and Buy</span>
+                      <span class="icon text-white-50">
+                        <i class="fas fa-shopping-bag"></i>
+                      </span>
+                      <span class="text">Bargain and Buy</span>
                     </a>
-                
                   </div>
                 </div>
               </div>
@@ -72,24 +72,24 @@
           </div>
 
           <div class="row" data-aos="fade-up">
-              <div class="col-md-12 text-center">
-                <div class="site-block-27">
-                  <ul>
-                      {% for page_num in products.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=4) %}
-                        {% if page_num %}
-                          {% if products.page == page_num %}
-                            <a class="btn btn-primary mb-4" href="{{ url_for('products.shop', page=page_num) }}">{{ page_num }}</a>
-                          {% else %}
-                            <a class="btn btn-outline-primary mb-4" href="{{ url_for('products.shop', page=page_num) }}">{{ page_num }}</a>
-                          {% endif %}
+            <div class="col-md-12 text-center">
+              <div class="site-block-27">
+                <ul>
+                    {% for page_num in products.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=4) %}
+                      {% if page_num %}
+                        {% if products.page == page_num %}
+                          <a class="btn btn-primary mb-4" href="{{ url_for('products.shop_by_category', category=category, page=page_num) }}">{{ page_num }}</a>
                         {% else %}
-                          ...
+                          <a class="btn btn-outline-primary mb-4" href="{{ url_for('products.shop_by_category', category=category, page=page_num) }}">{{ page_num }}</a>
                         {% endif %}
-                      {% endfor %}
-                  </ul>
-                </div>
+                      {% else %}
+                        ...
+                      {% endif %}
+                    {% endfor %}
+                </ul>
               </div>
             </div>
+          </div>
             
           </div>
 
@@ -97,32 +97,24 @@
             <div class="border p-4 rounded mb-4">
               <h3 class="mb-3 h6 text-uppercase text-black d-block">Categories</h3>
               <ul class="list-unstyled mb-0">
-                {% for category in categories %}
-                <li class="mb-1">
-                  <a href="{{ url_for('products.shop_by_category', category=category) }}" class="d-flex">
-                    <span>{{ category|title }}</span> 
-                    <span class="text-black ml-auto">
-                    </span>
-                  </a>
-                </li>
-                {% endfor %}
+                <li class="mb-1"><a href="{{ url_for('products.shop_by_category', category='men') }}" class="d-flex"><span>Men</span> <span class="text-black ml-auto"></span></a></li>
+                <li class="mb-1"><a href="{{ url_for('products.shop_by_category', category='women') }}" class="d-flex"><span>Women</span> <span class="text-black ml-auto"></span></a></li>
+                <li class="mb-1"><a href="{{ url_for('products.shop_by_category', category='boys') }}" class="d-flex"><span>Boys</span> <span class="text-black ml-auto"></span></a></li>
+                <li class="mb-1"><a href="{{ url_for('products.shop_by_category', category='girls') }}" class="d-flex"><span>Girls</span> <span class="text-black ml-auto"></span></a></li>
               </ul>
             </div>
 
             <div class="border p-4 rounded mb-4">
-             {% for category in categories %}
-              <div class="mb-4">
-                <h3 class="mb-3 h6 text-uppercase text-black d-block">{{ category|title }}</h3>
-                {% for type in types[category] %}
-                  <a href="{{ url_for('products.shop_by_type', category='men', type=type) }}" class="d-flex color-item align-items-center" >
-                    <span style="color: lightcoral;" class="far fa-arrow-alt-circle-right"></span>&nbsp;&nbsp; <span>{{ type|title }}</span>
-                  </a>
-                {% endfor %}
+                <div class="mb-4">
+                  <h3 class="mb-3 h6 text-uppercase text-black d-block">{{ category|title }}</h3>
+                  {% for type in types %}
+                    <a href="{{ url_for('products.shop_by_type', category='men', type=type) }}" class="d-flex color-item align-items-center" >
+                      <span style="color: lightcoral;" class="far fa-arrow-alt-circle-right"></span>&nbsp;&nbsp; <span>{{ type|title }}</span>
+                    </a>
+                  {% endfor %}
+                </div>
+                <hr>
               </div>
-              <hr>
-              {% endfor %}
-            </div>
-            
           </div>
         </div>
 
@@ -136,9 +128,9 @@
                 </div>
                 <div class="row">
                   <div class="col-sm-6 col-md-6 col-lg-3 mb-4 mb-lg-0" data-aos="fade" data-aos-delay="">
-                    <a class="block-2-item" href="{{ url_for('products.shop_by_category', category='women') }}">
+                    <a class="block-2-item" href="#">
                       <figure class="image">
-                        <img src="{{ url_for('static', filename='images/women.jpg') }}" alt="" class="img-fluid">
+                        <img src="../static/images/women.jpg" alt="" class="img-fluid">
                       </figure>
                       <div class="text">
                         <span class="text-uppercase">Collections</span>
@@ -147,9 +139,9 @@
                     </a>
                   </div>
                   <div class="col-sm-6 col-md-6 col-lg-3 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="200">
-                    <a class="block-2-item" href="{{ url_for('products.shop_by_category', category='men') }}">
+                    <a class="block-2-item" href="#">
                       <figure class="image">
-                        <img src="{{ url_for('static', filename='images/men.jpg') }}" alt="" class="img-fluid">
+                        <img src="../static/images/men.jpg" alt="" class="img-fluid">
                       </figure>
                       <div class="text">
                         <span class="text-uppercase">Collections</span>
@@ -158,9 +150,9 @@
                     </a>
                   </div>
                   <div class="col-sm-6 col-md-6 col-lg-3 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
-                    <a class="block-2-item" href="{{ url_for('products.shop_by_category', category='boys') }}">
+                    <a class="block-2-item" href="#">
                       <figure class="image">
-                        <img src="{{ url_for('static', filename='images/boys.jpg') }}" alt="" class="img-fluid">
+                        <img src="../static/images/boys.jpg" alt="" class="img-fluid">
                       </figure>
                       <div class="text">
                         <span class="text-uppercase">Collections</span>
@@ -168,11 +160,10 @@
                       </div>
                     </a>
                   </div>
-
                   <div class="col-sm-6 col-md-6 col-lg-3 mb-5 mb-lg-0" data-aos="fade" data-aos-delay="100">
-                    <a class="block-2-item" href="{{ url_for('products.shop_by_category', category='girls') }}">
+                    <a class="block-2-item" href="#">
                       <figure class="image">
-                        <img src="{{ url_for('static', filename='images/girls.jpg') }}" alt="" class="img-fluid">
+                        <img src="../static/images/girls.jpg" alt="" class="img-fluid">
                       </figure>
                       <div class="text">
                         <span class="text-uppercase">Collections</span>

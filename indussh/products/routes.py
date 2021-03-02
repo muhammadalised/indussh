@@ -11,8 +11,14 @@ products = Blueprint('products', __name__)
 @products.route('/shop')
 def shop():
     page = request.args.get('page', 1, type=int)
+    categories = [c[0] for c in Product.query.with_entities(Product.category).distinct()]
+    types={}
+    for category in categories:
+        types[category] = [t[0] for t in Product.query.filter_by(category=category).with_entities(Product.type).distinct()]
+    
     products = Product.query.order_by(Product.added_on.desc()).paginate(page=page, per_page=9)
-    return render_template('shop.html', products=products)
+
+    return render_template('shop.html', products=products, categories=categories, types=types)
 
 @products.route('/shop/product/<string:article_no>')
 def shop_single(article_no):
@@ -42,7 +48,17 @@ def shop_single(article_no):
 def shop_by_category(category):
     page = request.args.get('page', 1, type=int)
     products = Product.query.filter_by(category=category).order_by(Product.added_on.desc()).paginate(page=page, per_page=9)
-    return render_template('shop-by-category.html', products=products, category=category)
+    types=[]
+    types = [t[0] for t in Product.query.filter_by(category=category).with_entities(Product.type).distinct()]
+    return render_template('shop-by-category.html', products=products, category=category, types=types)
+
+@products.route('/shop/<string:category>/<string:type>')
+def shop_by_type(category, type):
+    page = request.args.get('page', 1, type=int)
+    products = Product.query.filter_by(category=category, type=type).order_by(Product.added_on.desc()).paginate(page=page, per_page=9)
+    types=[]
+    types = [t[0] for t in Product.query.filter_by(category=category).with_entities(Product.type).distinct()]
+    return render_template('shop-by-type.html', products=products, type=type, category=category, types=types)
 
 @products.route('/shop/addtocart', methods=['POST'])
 def add_to_cart():

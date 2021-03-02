@@ -105,54 +105,16 @@
             </div>
 
             <div class="border p-4 rounded mb-4">
-              <div class="mb-4">
-                <h3 class="mb-3 h6 text-uppercase text-black d-block">Men</h3>
-                <a href="#" class="d-flex color-item align-items-center" >
-                  <span class="fas fa-tshirt" style="color:red;"></span>&nbsp;&nbsp; <span class="text-black">Tops</span>
-                </a>
-                <a href="#" class="d-flex color-item align-items-center" >
-                  <span class="fas fa-archway"></span>&nbsp;&nbsp; <span class="text-black">Bottoms</span>
-                </a>
-                <a href="#" class="d-flex color-item align-items-center" >
-                  <span class="fas fa-hat-wizard" style="color:seagreen;"></span>&nbsp;&nbsp; <span class="text-black">Accessories</span>
-                </a>
-                <a href="#" class="d-flex color-item align-items-center" >
-                  <span class="fas fa-socks" style="color:brown;"></span>&nbsp;&nbsp; <span class="text-black">Footwear</span>
-                </a>
-              </div>
-              <hr>
-              <div class="mb-4">
-                <h3 class="mb-3 h6 text-uppercase text-black d-block">Women</h3>
-                <a href="#" class="d-flex color-item align-items-center" >
-                  <span class="fas fa-tshirt" style="color:red;"></span>&nbsp;&nbsp; <span class="text-black">Tops</span>
-                </a>
-                <a href="#" class="d-flex color-item align-items-center" >
-                  <span class="fas fa-archway"></span>&nbsp;&nbsp; <span class="text-black">Bottoms</span>
-                </a>
-                <a href="#" class="d-flex color-item align-items-center" >
-                  <span class="fas fa-hat-wizard" style="color:seagreen;"></span>&nbsp;&nbsp; <span class="text-black">Accessories</span>
-                </a>
-                <a href="#" class="d-flex color-item align-items-center" >
-                  <span class="fas fa-socks" style="color:brown;"></span>&nbsp;&nbsp; <span class="text-black">Footwear</span>
-                </a>
-              </div>
-              <hr>
-              <div class="mb-4">
-                <h3 class="mb-3 h6 text-uppercase text-black d-block">Children</h3>
-                <a href="#" class="d-flex color-item align-items-center" >
-                  <span class="fas fa-tshirt" style="color:red;"></span>&nbsp;&nbsp; <span class="text-black">Tops</span>
-                </a>
-                <a href="#" class="d-flex color-item align-items-center" >
-                  <span class="fas fa-archway"></span>&nbsp;&nbsp; <span class="text-black">Bottoms</span>
-                </a>
-                <a href="#" class="d-flex color-item align-items-center" >
-                  <span class="fas fa-hat-wizard" style="color:seagreen;"></span>&nbsp;&nbsp; <span class="text-black">Accessories</span>
-                </a>
-                <a href="#" class="d-flex color-item align-items-center" >
-                  <span class="fas fa-socks" style="color:brown;"></span>&nbsp;&nbsp; <span class="text-black">Footwear</span>
-                </a>
-              </div>
-            </div>
+               <div class="mb-4">
+                 <h3 class="mb-3 h6 text-uppercase text-black d-block">{{ category|title }}</h3>
+                 {% for type in types %}
+                   <a href="{{ url_for('products.shop_by_type', category='men', type=type) }}" class="d-flex color-item align-items-center" >
+                     <span style="color: lightcoral;" class="far fa-arrow-alt-circle-right"></span>&nbsp;&nbsp; <span>{{ type|title }}</span>
+                   </a>
+                 {% endfor %}
+               </div>
+               <hr>
+             </div>
           </div>
         </div>
 
