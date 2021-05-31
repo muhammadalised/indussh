@@ -6,15 +6,16 @@ from indussh.config import DevelopmentConfig
 from flask_session import Session
 
 db = SQLAlchemy()
-bcrypt =  Bcrypt()
+bcrypt = Bcrypt()
 sess = Session()
 # login_manager = LoginManager()
 
+
 def create_app():
-    
+
     app = Flask(__name__)
     app.config.from_object(DevelopmentConfig)
-    
+
     db.init_app(app)
     bcrypt.init_app(app)
     sess.init_app(app)

@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 {% set active_page = 'shop' %}
 {% set pg = 'shop_single' %}
+{% set prod_cat = product.category %}
 {% block body %}
 
     <div class="bg-light py-3">
@@ -88,6 +89,8 @@
           <div class="col-md-12">
             <div class="nonloop-block-3 owl-carousel">
                 {% for product in recommendations %}
+                <!-- Make sure that same category recommendations are shown -->
+                  {% if product.category == prod_cat %}
                     <div class="item">
                       <div class="block-4 text-center">
                         <figure class="block-4-image">
@@ -100,6 +103,7 @@
                         </div>
                       </div>
                     </div>
+                    {% endif %}
                 {% endfor %}
             </div>
           </div>
