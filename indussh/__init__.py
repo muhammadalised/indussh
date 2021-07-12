@@ -9,9 +9,11 @@ db = SQLAlchemy()
 bcrypt = Bcrypt()
 sess = Session()
 login_manager = LoginManager()
+login_manager.login_view = 'admin.login'
+login_manager.login_message_category = 'info'
 
 
-def create_app():
+def create_app(config_class=DevelopmentConfig):
 
     app = Flask(__name__)
     app.config.from_object(DevelopmentConfig)
