@@ -108,7 +108,7 @@
                 <div class="mb-4">
                   <h3 class="mb-3 h6 text-uppercase text-black d-block">{{ category|title }}</h3>
                   {% for type in types %}
-                    <a href="{{ url_for('products.shop_by_type', category='men', type=type) }}" class="d-flex color-item align-items-center" >
+                    <a href="{{ url_for('products.shop_by_type', category=category, type=type) }}" class="d-flex color-item align-items-center" >
                       <span style="color: lightcoral;" class="far fa-arrow-alt-circle-right"></span>&nbsp;&nbsp; <span>{{ type|title }}</span>
                     </a>
                   {% endfor %}
