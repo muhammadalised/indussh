@@ -9,8 +9,6 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 # UserMixin is a class that we need to inherit so that we do not need to implement it's methods and use it's default methods
-
-
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(60), unique=True, nullable=False)

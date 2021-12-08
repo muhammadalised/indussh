@@ -22,27 +22,36 @@ def shop():
 
 @products.route('/shop/product/<string:article_no>')
 def shop_single(article_no):
+    # Get the product data
     product = Product.query.filter_by(article_no=article_no).first()
+    # Get the recommendations for the product
+    recommendations = get_product_recommendations(article_no=article_no)
 
-    prods = pd.read_sql(db.session.query(Product).with_entities(Product.id, 
-                                                                Product.article_no, 
-                                                                Product.name, 
-                                                                Product.description,
-                                                                Product.type,
-                                                                Product.category).statement, db.session.bind)
+    return render_template('shop-single.html', product=product, recommendations=recommendations)
 
+def get_product_recommendations(article_no):
+    # Get the sql query
+    sql = db.session.query(Product).with_entities(Product.id, 
+                                                    Product.article_no, 
+                                                    Product.name, 
+                                                    Product.description,
+                                                    Product.type,
+                                                    Product.category).statement
+    # Read the data from database using pandas
+    prods = pd.read_sql(sql, db.session.bind)
+
+    # Extract and combine the features for the recommendation system
     prods['details'] = prods['name'] + ' ' + prods['category'] + ' ' + prods['type'] + ' ' + prods['description']
+    # Drop the columns after extracting the features
     prods.drop(['name', 'category', 'type', 'description'], axis=1, inplace=True)
-
+    # Initialize the recommender instance
     recommender = Recommender(prods)
+    # Get recommendation results
     recommendation_results = recommender.recommend(article_no, 10)
-    
     # Get Article no's of recommended products
     rec_prods_nos = [rec[1] for rec in recommendation_results]
 
-    recommendations = Product.query.filter(Product.article_no.in_(rec_prods_nos)).all()
-
-    return render_template('shop-single.html', product=product, recommendations=recommendations)
+    return Product.query.filter(Product.article_no.in_(rec_prods_nos)).all()
 
 @products.route('/shop/<string:category>')
 def shop_by_category(category):
