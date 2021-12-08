@@ -9,5 +9,4 @@
 ### Todos
 1. Set up flask admin 
 2. Customize flask admin
-3. Add flask migrations
-4. Integrate the chatbot into website
+3. Integrate the chatbot into website
