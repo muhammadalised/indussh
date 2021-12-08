@@ -4,7 +4,7 @@ from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from indussh.config import DevelopmentConfig
-from flask_session import Session
+from flask_session import Session, SqlAlchemySessionInterface
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -22,8 +22,10 @@ def create_app(config_class=DevelopmentConfig):
 
     db.init_app(app)
     migrate.init_app(app, db)
-    bcrypt.init_app(app)
     sess.init_app(app)
+    SqlAlchemySessionInterface(app, db, "sessions", "sess_")
+    
+    bcrypt.init_app(app)
     login_manager.init_app(app)
 
     from indussh.main.routes import main
