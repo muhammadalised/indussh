@@ -12,6 +12,7 @@ load_dotenv(envars)
 class Config:
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL") # mysql://username:password@server/db
     SESSION_TYPE=os.environ.get('SESSION_TYPE')
+    FLASK_ADMIN_SWATCH = 'cerulean'
 
 class ProductionConfig(Config):
     DEBUG = False

@@ -7,6 +7,5 @@
 - Tensorflow
 
 ### Todos
-1. Set up flask admin 
-2. Customize flask admin
-3. Integrate the chatbot into website
+1. Customize flask admin
+2. Integrate the chatbot into website
