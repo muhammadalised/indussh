@@ -94,3 +94,5 @@ ipython_config.py
 /*_session/
 .env
 .flaskenv
+
+db_seeders/
