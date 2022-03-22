@@ -43,4 +43,5 @@ venv
 
 # Environment files
 .env
+.flaskenv
 .env-mysql
