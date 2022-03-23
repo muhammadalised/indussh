@@ -4,6 +4,9 @@ from flask_login import UserMixin
 from datetime import datetime
 import pandas as pd
 
+class Role(db.Model):
+    __tablename__ = 'roles'
+    pass
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -21,7 +24,6 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
-
 
 class Customer(db.Model):
     __tablename__ = 'customers'
