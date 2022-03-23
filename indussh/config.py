@@ -7,6 +7,8 @@ class Config:
     FLASK_ADMIN_SWATCH = 'cerulean'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    PRODUCTS_DATA_PATH = os.path.join(basedir, 'seed_data/Products.csv')
+
     @staticmethod
     def init_app(app):
         pass

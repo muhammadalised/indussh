@@ -2,6 +2,7 @@ from indussh import db, login_manager
 from flask import current_app
 from flask_login import UserMixin
 from datetime import datetime
+import pandas as pd
 
 
 @login_manager.user_loader
@@ -10,6 +11,8 @@ def load_user(user_id):
 
 # UserMixin is a class that we need to inherit so that we do not need to implement it's methods and use it's default methods
 class User(db.Model, UserMixin):
+    __tablename__ = 'users'
+
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(60), unique=True, nullable=False)
     image_file = db.Column(db.String(20), default='default.jpg')
@@ -21,6 +24,8 @@ class User(db.Model, UserMixin):
 
 
 class Customer(db.Model):
+    __tablename__ = 'customers'
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(60), nullable=False)
     address = db.Column(db.String(500), nullable=False)
@@ -33,6 +38,8 @@ class Customer(db.Model):
 
 
 class Product(db.Model):
+    __tablename__ = 'products'
+
     id = db.Column(db.Integer, primary_key=True)
     article_no = db.Column(db.String(10), nullable=False, unique=True)
     name = db.Column(db.String(100), nullable=False)
@@ -53,9 +60,41 @@ class Product(db.Model):
 
     def __repr__(self):
         return f"Product('{self.article_no}', '{self.name}', '{self.price}')"
+    
+    @staticmethod
+    def insert_products():
+        columns = [
+        'article_no', 'name', 'description', 'type', 'category', 
+        'price', 'minimum_price', 'image_file', 'size_sm', 'size_md',
+        'size_l', 'size_xl'
+        ]
+
+        df = pd.read_csv(current_app.config['PRODUCTS_DATA_PATH'])
+        df.columns = columns
+
+        for i in range(len(df)):
+            product = Product(
+                article_no=df.iloc[i]['article_no'],
+                name=df.iloc[i]['name'],
+                description=df.iloc[i]['description'],
+                type=df.iloc[i]['type'],
+                category=df.iloc[i]['category'],
+                price=df.iloc[i]['price'],
+                minimum_price=df.iloc[i]['minimum_price'],
+                image_file=df.iloc[i]['image_file'],
+                size_sm=df.iloc[i]['size_sm'],
+                size_md=df.iloc[i]['size_md'],
+                size_l=df.iloc[i]['size_l'],
+                size_xl=df.iloc[i]['size_xl']
+            )
+
+            db.session.add(product)
+        db.session.commit()
 
 
 class Order(db.Model):
+    __tablename__ = 'orders'
+
     id = db.Column(db.Integer, primary_key=True)
     amount = db.Column(db.Integer, nullable=False)
     completed = db.Column(db.Boolean, default=False)
@@ -64,7 +103,7 @@ class Order(db.Model):
     date_completed = db.Column(db.DateTime)
 
     customer_id = db.Column(db.Integer, db.ForeignKey(
-        'customer.id'), nullable=False)
+        'customers.id'), nullable=False)
     order_items = db.relationship('OrderItem', backref='order')
 
     notes = db.Column(db.Text)
@@ -74,13 +113,14 @@ class Order(db.Model):
 
 
 class OrderItem(db.Model):
+    __tablename__ = 'orderitems'
     id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
     discounted_price = db.Column(db.Integer, nullable=False)
 
     product_id = db.Column(db.Integer, db.ForeignKey(
-        'product.id'), nullable=False)
-    order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
+        'products.id'), nullable=False)
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.id'), nullable=False)
 
     def __repr__(self):
         return f"OrderItem('{self.id}', '{self.quantity}', '{self.discounted_price}')"
