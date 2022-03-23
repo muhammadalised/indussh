@@ -1,27 +1,30 @@
 import os
-from pathlib import Path
-from dotenv import load_dotenv
-
-# Get the base directory
-basepath = Path()
-basedir = str(basepath.cwd())
-# Load the environment variables
-envars = basepath.cwd() / '.env'
-load_dotenv(envars)
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config:
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL") # mysql://username:password@server/db
     SESSION_TYPE=os.environ.get('SESSION_TYPE')
+    SECRET_KEY = os.environ.get('SECRET_KEY')
     FLASK_ADMIN_SWATCH = 'cerulean'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    @staticmethod
+    def init_app(app):
+        pass
+
+class DevelopmentConfig(Config):
+    DEBUG = True
+    OAUTHLIB_INSECURE_TRANSPORT = True
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
+        'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
 
 class ProductionConfig(Config):
     DEBUG = False
-    SECRET_KEY = os.environ.get('SECRET_KEY')
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
+        'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+    
+config = {
+    'development':  DevelopmentConfig,
+    'production': ProductionConfig,
 
-class DevelopmentConfig(Config):
-    ENV = "development"
-    DEVELOPMENT = True
-    SECRET_KEY = os.environ.get('SECRET_KEY')
-    OAUTHLIB_INSECURE_TRANSPORT = True
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    'default': DevelopmentConfig
+}

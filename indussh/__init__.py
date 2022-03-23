@@ -4,7 +4,7 @@ from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_session import Session, SqlAlchemySessionInterface
-from indussh.config import DevelopmentConfig
+from .config import config
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -16,10 +16,11 @@ login_manager.login_view = 'admin.login'
 login_manager.login_message_category = 'info'
 
 
-def create_app(config_class=DevelopmentConfig):
+def create_app(config_name):
 
     app = Flask(__name__)
-    app.config.from_object(DevelopmentConfig)
+    app.config.from_object(config[config_name])
+    config[config_name].init_app(app)
 
     # Initialize the flask-sqlalchemy instance
     db.init_app(app)
