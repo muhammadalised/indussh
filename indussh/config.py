@@ -4,7 +4,6 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class Config:
     SESSION_TYPE=os.environ.get('SESSION_TYPE')
     SECRET_KEY = os.environ.get('SECRET_KEY')
-    FLASK_ADMIN_SWATCH = 'cerulean'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     PRODUCTS_DATA_PATH = os.path.join(basedir, 'seed_data/Products.csv')

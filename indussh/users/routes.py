@@ -8,3 +8,7 @@ users = Blueprint('users' ,__name__)
 def register():
     form = RegisterForm()
     return render_template('register.html', form=form)
+
+@users.route('/login')
+def login():
+    pass

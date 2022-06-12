@@ -4,9 +4,9 @@ from flask_login import UserMixin
 from datetime import datetime
 import pandas as pd
 
-class Role(db.Model):
-    __tablename__ = 'roles'
-    pass
+# class Role(db.Model):
+#     __tablename__ = 'roles'
+#     pass
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -58,7 +58,7 @@ class Product(db.Model):
     size_xl = db.Column(db.Integer, nullable=False)
     added_on = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
-    ordered_items = db.relationship('OrderItem', backref='ordered-products')
+    ordered_items = db.relationship('OrderItem', backref='ordered_products')
 
     def __repr__(self):
         return f"Product('{self.article_no}', '{self.name}', '{self.price}')"
@@ -76,22 +76,23 @@ class Product(db.Model):
 
         for i in range(len(df)):
             product = Product(
-                article_no=df.iloc[i]['article_no'],
+                article_no=str(df.iloc[i]['article_no']),
                 name=df.iloc[i]['name'],
                 description=df.iloc[i]['description'],
                 type=df.iloc[i]['type'],
                 category=df.iloc[i]['category'],
-                price=df.iloc[i]['price'],
-                minimum_price=df.iloc[i]['minimum_price'],
+                price=int(df.iloc[i]['price']),
+                minimum_price=int(df.iloc[i]['minimum_price']),
                 image_file=df.iloc[i]['image_file'],
-                size_sm=df.iloc[i]['size_sm'],
-                size_md=df.iloc[i]['size_md'],
-                size_l=df.iloc[i]['size_l'],
-                size_xl=df.iloc[i]['size_xl']
+                size_sm=int(df.iloc[i]['size_sm']),
+                size_md=int(df.iloc[i]['size_md']),
+                size_l=int(df.iloc[i]['size_l']),
+                size_xl=int(df.iloc[i]['size_xl'])
             )
 
             db.session.add(product)
         db.session.commit()
+        print(f'{len(df)} Products Seeded into Database!')
 
 
 class Order(db.Model):
@@ -104,8 +105,7 @@ class Order(db.Model):
         db.DateTime, nullable=False, default=datetime.utcnow)
     date_completed = db.Column(db.DateTime)
 
-    customer_id = db.Column(db.Integer, db.ForeignKey(
-        'customers.id'), nullable=False)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customers.id'), nullable=False)
     order_items = db.relationship('OrderItem', backref='order')
 
     notes = db.Column(db.Text)
@@ -120,8 +120,7 @@ class OrderItem(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     discounted_price = db.Column(db.Integer, nullable=False)
 
-    product_id = db.Column(db.Integer, db.ForeignKey(
-        'products.id'), nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)
     order_id = db.Column(db.Integer, db.ForeignKey('orders.id'), nullable=False)
 
     def __repr__(self):

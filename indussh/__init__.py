@@ -40,11 +40,10 @@ def create_app(config_name):
     from indussh.users.routes import users
     from indussh.admin.routes import admin
 
-    # Initiailize flask admin instance, originally declared in admin/routes.py file
-    admin.init_app(app)
 
     app.register_blueprint(main)
     app.register_blueprint(products)
     app.register_blueprint(users)
+    app.register_blueprint(admin)
 
     return app
