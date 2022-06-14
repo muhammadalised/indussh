@@ -5,13 +5,9 @@ from wtforms.validators import DataRequired, Length, EqualTo, Email, ValidationE
 
 
 class AdminForm(FlaskForm):
-    name = StringField('Name', [Length(min=1, max=100)],
-                       render_kw={"placeholder": "Name"})
-    email = StringField('Email', [Length(min=4, max=50), Email(), DataRequired()], render_kw={
-                        "placeholder": "Email"})
-    password = PasswordField('Password',
-                             validators=[DataRequired()],
-                             render_kw={"placeholder": "Password"})
+    name = StringField('Name', [Length(min=1, max=100)], render_kw={"placeholder": "Name"})
+    email = StringField('Email', [Length(min=4, max=50), Email(), DataRequired()], render_kw={"placeholder": "Email"})
+    password = PasswordField('Password', validators=[DataRequired()], render_kw={"placeholder": "Password"})
     confirm_password = PasswordField('Confirm Password',
                                      validators=[
                                          EqualTo('password', message='Passwords do not match')],
