@@ -23,11 +23,11 @@ class Recommender:
             self.recommendations[row['article_no']] = similar_items[1:]
 
 
-    # function to get a friendly item name from the description field, given an item ID
+    # Function to get a friendly item name from the description field, given an item ID
     def item(self, article_no):
         return self.products.loc[self.products['article_no'] == article_no]['description'].tolist()[0].split(' - ')[0]
 
-    # Just reads the results out of the dictionary. No real logic here.
+    # Reads the results out of the dictionary. No real logic here.
     def recommend(self, item_article_no, num):
         recs = self.recommendations[item_article_no]
         recs = sorted(recs, key=lambda tup: tup[0], reverse=True) # Sort the recommendations based on their score in descending order

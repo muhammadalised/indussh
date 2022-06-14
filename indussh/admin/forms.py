@@ -18,6 +18,12 @@ class AdminForm(FlaskForm):
                                      render_kw={"placeholder": "Confirm Password"})
     submit = SubmitField('Create Admin')
 
+class AdminLoginForm(FlaskForm):
+    email = StringField('Email', [Length(min=4, max=50), Email(), DataRequired()], render_kw={
+                        "placeholder": "Email"})
+    password = PasswordField('Password',
+                             validators=[DataRequired()],
+                             render_kw={"placeholder": "Password"})
 
 class ProductForm(FlaskForm):
     article = StringField('Product Article No', [

@@ -1,14 +1,13 @@
 from flask import render_template, redirect, url_for, Blueprint, request, session, jsonify
-from indussh.models import Product, Customer, User, Order, OrderItem
+from indussh.models import Product, Customer, Order, OrderItem
 from indussh.products.forms import BillingForm
 from indussh.products.recommender import Recommender
-from indussh import db, bcrypt
+from indussh import db
 import pandas as pd
 
 products = Blueprint('products', __name__)
 
-@products.route('/shop/')
-@products.route('/shop')
+@products.route('/')
 def shop():
     page = request.args.get('page', 1, type=int)
     categories = [c[0] for c in Product.query.with_entities(Product.category).distinct()]
@@ -20,7 +19,7 @@ def shop():
 
     return render_template('shop.html', products=products, categories=categories, types=types)
 
-@products.route('/shop/product/<string:article_no>')
+@products.route('/product/<string:article_no>')
 def shop_single(article_no):
     # Get the product data
     product = Product.query.filter_by(article_no=article_no).first()
@@ -53,7 +52,7 @@ def get_product_recommendations(article_no):
 
     return Product.query.filter(Product.article_no.in_(rec_prods_nos)).all()
 
-@products.route('/shop/<string:category>')
+@products.route('/<string:category>')
 def shop_by_category(category):
     page = request.args.get('page', 1, type=int)
     products = Product.query.filter_by(category=category).order_by(Product.added_on.desc()).paginate(page=page, per_page=9)
@@ -61,7 +60,7 @@ def shop_by_category(category):
     types = [t[0] for t in Product.query.filter_by(category=category).with_entities(Product.type).distinct()]
     return render_template('shop-by-category.html', products=products, category=category, types=types)
 
-@products.route('/shop/<string:category>/<string:type>')
+@products.route('/<string:category>/<string:type>')
 def shop_by_type(category, type):
     page = request.args.get('page', 1, type=int)
     products = Product.query.filter_by(category=category, type=type).order_by(Product.added_on.desc()).paginate(page=page, per_page=9)
@@ -69,7 +68,7 @@ def shop_by_type(category, type):
     types = [t[0] for t in Product.query.filter_by(category=category).with_entities(Product.type).distinct()]
     return render_template('shop-by-type.html', products=products, type=type, category=category, types=types)
 
-@products.route('/shop/addtocart', methods=['POST'])
+@products.route('/addtocart', methods=['POST'])
 def add_to_cart():
     article_no = request.form['article_no']
     size_selected = request.form['size']
@@ -98,7 +97,7 @@ def add_to_cart():
    
     return jsonify({'error': 'Please select size and quantity'})
 
-@products.route('/shop/cart')
+@products.route('/cart')
 def cart():
     cart_prods = []
     if 'cart' in session:
@@ -126,7 +125,7 @@ def calculate_total_amount(products):
     return total_amount
     # session.pop('discount_price', None)
 
-@products.route('/shop/removecartitem/<string:article_no>')
+@products.route('/removecartitem/<string:article_no>')
 def remove_from_cart(article_no):
     if article_no in session['cart']:
         session['cart'].pop(article_no)
@@ -135,7 +134,7 @@ def remove_from_cart(article_no):
         return redirect(url_for('products.cart'))
 
 
-@products.route('/shop/checkout', methods=['GET', 'POST'])
+@products.route('/checkout', methods=['GET', 'POST'])
 def checkout():
      if 'cart' in session:
         cart_prods = list(session['cart'].keys())
@@ -177,7 +176,7 @@ def checkout():
         return render_template('checkout.html', products=products, total=total, form=form)
 
 
-@products.route('/shop/completed')
+@products.route('/completed')
 def thanks():
     return render_template('thankyou.html')
 

@@ -42,8 +42,8 @@ def create_app(config_name):
 
 
     app.register_blueprint(main)
-    app.register_blueprint(products)
+    app.register_blueprint(products, url_prefix='/shop')
     app.register_blueprint(users)
-    app.register_blueprint(admin)
+    app.register_blueprint(admin, url_prefix='/admin')
 
     return app
