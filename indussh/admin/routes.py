@@ -6,7 +6,7 @@ from indussh.models import User
 admin = Blueprint('admin', __name__)
 
 @admin.route('/login')
-def admin_login():
+def login():
     if current_user.is_authenticated:
         return redirect(url_for('admin_dashboard'))
     form = AdminLoginForm()
@@ -16,27 +16,25 @@ def admin_login():
         if user is not None and user.verify_password(form.password.data):
             login_user(user)
             return redirect(url_for('admin_dashboard'))
-        
 
     return render_template('admin/login.html', title='Login', form=form)
 
 @admin.route('/logout')
-def admin_logout():
-    pass
-
+def logout():
+    return redirect(url_for('admin.login'))
 
 @admin.route('/')
 @admin.route('/dashboard')
-def admin_dashboard():
+def dashboard():
     return render_template('admin/dashboard.html')
 
 @admin.route('/staff')
 def display_staff():
-    pass
+    return render_template('admin/staff.html')
 
 @admin.route('/add-staff')
 def add_staff():
-    pass
+    return render_template('admin/staff-add.html')
 
 @admin.route('/delete-staff/<int:id>')
 def delete_staff(id):
@@ -48,11 +46,11 @@ def edit_staff(id):
 
 @admin.route('/products')
 def display_products():
-    pass
+    return render_template('admin/products.html')
 
 @admin.route('/add-product')
 def add_product():
-    pass
+    return render_template('admin/products-add.html')
 
 @admin.route('/delete-product/<int:product_id>')
 def delete_product(product_id):
@@ -64,7 +62,7 @@ def edit_product(product_id):
 
 @admin.route('/orders')
 def orders():
-    pass
+    return render_template('admin/orders.html')
 
 @admin.route('/cancel-order/<int:order_id>')
 def cancel_order(order_id):
