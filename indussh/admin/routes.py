@@ -44,6 +44,10 @@ def delete_staff(id):
 def edit_staff(id):
     pass
 
+@admin.route('/customers')
+def display_customers():
+    return render_template('admin/customers.html')
+
 @admin.route('/products')
 def display_products():
     return render_template('admin/products.html')
