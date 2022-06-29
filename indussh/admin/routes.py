@@ -20,54 +20,67 @@ def login():
     return render_template('admin/login.html', title='Login', form=form)
 
 @admin.route('/logout')
+@login_required
 def logout():
     return redirect(url_for('admin.login'))
 
 @admin.route('/')
 @admin.route('/dashboard')
+@login_required
 def dashboard():
     return render_template('admin/dashboard.html')
 
 @admin.route('/staff')
+@login_required
 def display_staff():
     return render_template('admin/staff.html')
 
 @admin.route('/add-staff')
+@login_required
 def add_staff():
     return render_template('admin/staff-add.html')
 
 @admin.route('/delete-staff/<int:id>')
+@login_required
 def delete_staff(id):
     pass
 
 @admin.route('/edit-staff/<int:id>')
+@login_required
 def edit_staff(id):
     pass
 
 @admin.route('/customers')
+@login_required
 def display_customers():
     return render_template('admin/customers.html')
 
 @admin.route('/products')
+@login_required
 def display_products():
     return render_template('admin/products.html')
 
 @admin.route('/add-product')
+@login_required
 def add_product():
     return render_template('admin/products-add.html')
 
 @admin.route('/delete-product/<int:product_id>')
+@login_required
 def delete_product(product_id):
     pass
 
 @admin.route('/edit-product/<int:product_id>')
+@login_required
 def edit_product(product_id):
     pass
 
 @admin.route('/orders')
+@login_required
 def orders():
     return render_template('admin/orders.html')
 
 @admin.route('/cancel-order/<int:order_id>')
+@login_required
 def cancel_order(order_id):
     pass
