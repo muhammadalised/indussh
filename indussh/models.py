@@ -20,6 +20,7 @@ class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(60), unique=True)
     email = db.Column(db.String(60), unique=True, nullable=False)
     image_file = db.Column(db.String(20), default='default.jpg')
     password_hash = db.Column(db.String(128), nullable=False)
@@ -37,10 +38,24 @@ class User(db.Model, UserMixin):
     
     @password.setter
     def password(self, password):
-        self.password_hash = generate_password_hash(self.password_hash, password)
+        self.password_hash = generate_password_hash(password)
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def username_exists(self, username):
+        user = self.query.filter_by(username=self.username)
+        if user:
+            return True
+        return False
+    
+    @staticmethod
+    def create_admin():
+        admin = User(username='admin', email='admin@indussh.com', password="admin123", is_admin=True)
+        db.session.add(admin)
+        db.session.commit()
+        print('Admin Created!')
+
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
