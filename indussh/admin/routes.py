@@ -1,27 +1,31 @@
-from flask import Flask, render_template, redirect, url_for, Blueprint
+from flask import Flask, render_template, redirect, url_for, Blueprint, flash, request
 from flask_login import current_user, login_user, logout_user, login_required
-from .forms import AdminLoginForm
+from .forms import AdminLoginForm, StaffForm, ProductForm
 from indussh.models import User
 
 admin = Blueprint('admin', __name__)
 
-@admin.route('/login')
+@admin.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('admin_dashboard'))
+    
     form = AdminLoginForm()
-
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data.lower()).first()
         if user is not None and user.verify_password(form.password.data):
-            login_user(user)
-            return redirect(url_for('admin_dashboard'))
-
+            login_user(user, remember=form.remember.data)
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('admin.dashboard'))
+        
+        flash('Invalid email or password.', 'danger')
     return render_template('admin/login.html', title='Login', form=form)
 
 @admin.route('/logout')
 @login_required
 def logout():
+    logout_user()
+    flash('You have been logged out.')
     return redirect(url_for('admin.login'))
 
 @admin.route('/')

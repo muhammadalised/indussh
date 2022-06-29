@@ -1,18 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, TextAreaField, PasswordField, IntegerField, SubmitField
+from wtforms import StringField, TextAreaField, PasswordField, IntegerField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, EqualTo, Email, ValidationError
-
-
-class AdminForm(FlaskForm):
-    name = StringField('Name', [Length(min=1, max=100)], render_kw={"placeholder": "Name"})
-    email = StringField('Email', [Length(min=4, max=50), Email(), DataRequired()], render_kw={"placeholder": "Email"})
-    password = PasswordField('Password', validators=[DataRequired()], render_kw={"placeholder": "Password"})
-    confirm_password = PasswordField('Confirm Password',
-                                     validators=[
-                                         EqualTo('password', message='Passwords do not match')],
-                                     render_kw={"placeholder": "Confirm Password"})
-    submit = SubmitField('Create Admin')
 
 class AdminLoginForm(FlaskForm):
     email = StringField('Email', [Length(min=4, max=50), Email(), DataRequired()], render_kw={
@@ -20,6 +9,19 @@ class AdminLoginForm(FlaskForm):
     password = PasswordField('Password',
                              validators=[DataRequired()],
                              render_kw={"placeholder": "Password"})
+    remember = BooleanField('Remember Me')
+
+    submit = SubmitField('Login')
+
+class StaffForm(FlaskForm):
+    name = StringField('Name', [Length(min=1, max=100)], render_kw={"placeholder": "Name"})
+    email = StringField('Email', [Length(min=4, max=50), Email(), DataRequired()], render_kw={"placeholder": "Email"})
+    password = PasswordField('Password', validators=[DataRequired()], render_kw={"placeholder": "Password"})
+    confirm_password = PasswordField('Confirm Password',
+                                     validators=[
+                                         EqualTo('password', message='Passwords do not match')],
+                                     render_kw={"placeholder": "Confirm Password"})
+    submit = SubmitField('Add Staff')
 
 class ProductForm(FlaskForm):
     article = StringField('Product Article No', [
