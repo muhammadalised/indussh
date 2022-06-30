@@ -88,7 +88,8 @@ def edit_product(product_id):
 @admin.route('/orders')
 @login_required
 def orders():
-    return render_template('admin/orders.html')
+    orders = Order.query.all()
+    return render_template('admin/orders.html', orders=orders)
 
 @admin.route('/cancel-order/<int:order_id>')
 @login_required

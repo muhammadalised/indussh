@@ -19,23 +19,36 @@
                   <thead>
                     <tr>
                       <th>ID</th>
-                      <th>Name</th>
-                      <th>Email</th>
+                      <th>Amount</th>
+                      <th>Status</th>
                       <th>Created on</th>
-                      <th>Delete</th>
+                      <th>Fulfilled On</th>
+                      <th>Customer</th>
+                      <th>Order Details</th>
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Created on</th>
-                        <th>Delete</th>
+                      <th>ID</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                      <th>Created on</th>
+                      <th>Fulfilled On</th>
+                      <th>Customer</th>
+                      <th>Order Details</th>
                     </tr>
                   </tfoot>
                   <tbody>
-                 
+                    {% if orders|length > 0 %}
+                      {% for order in orders  %}
+                        <td>order.id</td>
+                        <td>order.amount</td>
+                        <td>order.completed</td>
+                        <td>order.date_created</td>
+                        <td>order.date_completed</td>
+                        <td><a href="#" role="button" class="btn btn-sm btn-primary">Details</a></td>
+                      {% endfor %}
+                    {% endif %}
                   </tbody>
                 </table>
               </div>
