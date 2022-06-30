@@ -15,16 +15,16 @@
             </div>
             <div class="card-body">
               <div class="row">
-                {% for product in product_rows %} 
+                {% for product in products %} 
                       <div class="col-sm-6 col-lg-3 mb-4" data-aos="fade-up">
                           <div class="block-4 text-center border">
                             <figure class="block-4-image">
-                              <a href="shop-single.html"><img src="{{product.image_path}}" alt="Image placeholder" class="img-fluid"></a>
+                              <a href="#"><img src="{{ url_for('static', filename='uploads/product_images/' + product.image_file) }}" alt="Image placeholder" class="img-fluid"></a>
                             </figure>
                             <div class="block-4-text p-4">
-                              <h4>{{product.prd_name}}</h4>
-                              <p class="mb-0">Finding perfect products</p>
-                              <p class="text-primary font-weight-bold">{{product.prd_price}}</p>
+                              <h5>{{product.name}}</h5>
+                              <p class="mb-0">{{ product.article_no }}</p>
+                              <p class="text-primary font-weight-bold">{{price}}</p>
 
                               <a href="#" class="btn btn-success btn-icon-split btn-sm">
                                   <span class="icon text-white-50">
@@ -43,12 +43,7 @@
                           </div>
                         </div>
                 {% endfor %}
-              </div>
-                <ul class="pagination pagination-lg" style="justify-content:center">
-                  {% for page_num in range(num_of_pages) %}
-                    <li class="page-item"><a class="page-link" href="{{ url_for('products', page=page_num+1) }}">{{page_num+1}}</a></li>
-                  {% endfor %}
-                </ul>             
+              </div>        
             </div>
           </div>
           

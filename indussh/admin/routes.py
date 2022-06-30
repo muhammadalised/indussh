@@ -68,7 +68,9 @@ def display_customers():
 @admin.route('/products')
 @login_required
 def display_products():
-    return render_template('admin/products.html')
+    products = Product.query.all()
+    # TODO: Complete the pagination
+    return render_template('admin/products.html', products=products)
 
 @admin.route('/add-product')
 @login_required
