@@ -43,7 +43,8 @@ def dashboard():
 @admin.route('/staff')
 @login_required
 def display_staff():
-    return render_template('admin/staff.html')
+    staff_users = User.query.all()
+    return render_template('admin/staff.html', staff_users=staff_users)
 
 @admin.route('/add-staff')
 @login_required
