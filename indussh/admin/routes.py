@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, Blueprint, flash, request
 from flask_login import current_user, login_user, logout_user, login_required
 from .forms import AdminLoginForm, StaffForm, ProductForm
-from indussh.models import User
+from indussh.models import Product, User, Order
 
 admin = Blueprint('admin', __name__)
 
@@ -25,14 +25,20 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash('You have been logged out.')
+    flash('You have been logged out.', 'info')
     return redirect(url_for('admin.login'))
 
 @admin.route('/')
 @admin.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('admin/dashboard.html')
+    products_count = Product.query.count()
+    staff_count = User.query.count()
+    orders_count = Order.query.count()
+    return render_template('admin/dashboard.html', 
+                            products_count=products_count,
+                            staff_count=staff_count,
+                            orders_count=orders_count)
 
 @admin.route('/staff')
 @login_required
