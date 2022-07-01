@@ -7,9 +7,75 @@ import pandas as pd
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
-# class Role(db.Model):
-#     __tablename__ = 'roles'
-#     pass
+class Permission:
+    
+    ADD_PRODUCT = 1
+    ADD_ORDER = 2
+    ADD_USER = 4
+    
+    UPDATE_PRODUCT = 8
+    UPDATE_ORDER = 12
+    UPDATE_USER = 16
+    
+    DELETE_PRODUCT = 32
+    DELETE_ORDER = 64
+    DELETE_USER = 128
+    
+    ADMIN = 256
+
+class Role(db.Model):
+    __tablename__ = 'roles'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+    permissions = db.Column(db.Integer)
+    
+    users = db.relationship('User', backref='role', lazy='dynamic')
+
+
+    def __init__(self, **kwargs):
+        super(Role, self).__init__(**kwargs)
+        if self.permissions is None:
+            self.permissions = 0
+
+    @staticmethod
+    def insert_roles():
+        roles = {
+            'Customer': [],
+            'Staff': [Permission.ADD_PRODUCT, Permission.UPDATE_PRODUCT,
+                        Permission.DELETE_PRODUCT, Permission.ADD_ORDER, 
+                        Permission.UPDATE_ORDER, Permission.DELETE_ORDER],
+            'Administrator': [Permission.ADD_USER, Permission.ADD_PRODUCT, 
+                                Permission.ADD_ORDER, Permission.UPDATE_ORDER,
+                                Permission.UPDATE_USER, Permission.UPDATE_PRODUCT,
+                                Permission.DELETE_USER, Permission.DELETE_PRODUCT,
+                                Permission.DELETE_ORDER, Permission.ADMIN],
+        }
+        for r in roles:
+            role = Role.query.filter_by(name=r).first()
+            if role is None:
+                role = Role(name=r)
+            role.reset_permissions()
+            for perm in roles[r]:
+                role.add_permission(perm)
+            db.session.add(role)
+        db.session.commit()
+    
+    def reset_permissions(self):
+        self.permissions = 0
+    
+    def add_permission(self, perm):
+        if not self.has_permission(perm):
+            self.permissions += perm
+    
+    def remove_permission(self, perm):
+        if self.has_permission(perm):
+            self.permissions -= perm
+    
+    def has_permission(self, perm):
+        return self.permissions & perm == perm
+    
+    
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -24,9 +90,13 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(60), unique=True, nullable=False)
     image_file = db.Column(db.String(20), default='default.jpg')
     password_hash = db.Column(db.String(128), nullable=False)
-    # TODO: Add create_date column with system date as default
+    created_on = db.Column(db.DateTime(), default=datetime.utcnow)
     
-    is_admin = db.Column(db.Boolean, default=False, nullable=False)
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+
+    # One to one relationship between user and customer, This relation will be used for non-guest customers 
+    # who sign up on the website
+    customer = db.relationship('Customer', backref='user', uselist=False)
 
     def create(self):
         db.session.add(self)
@@ -52,7 +122,7 @@ class User(db.Model, UserMixin):
     
     @staticmethod
     def create_admin():
-        admin = User(username='admin', email='admin@indussh.com', password="admin123", is_admin=True)
+        admin = User(username='admin', email='admin@indussh.com', password="admin123", role_id=2)
         db.session.add(admin)
         db.session.commit()
         print('Admin Created!')
@@ -72,6 +142,7 @@ class Customer(db.Model):
     email = db.Column(db.String(50), nullable=False, unique=True)
     phone_number = db.Column(db.String(20))
 
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     orders = db.relationship('Order', backref='customer')
 
 

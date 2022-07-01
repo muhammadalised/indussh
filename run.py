@@ -6,10 +6,10 @@ if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 
 from indussh import create_app, db
-from indussh.models import User, Customer, Product, Order, OrderItem
+from indussh.models import User, Customer, Product, Order, OrderItem, Role
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 
 @app.shell_context_processor
 def make_shell_context():
-    return dict(db=db, User=User, Customer=Customer, Product=Product, Order=Order, OrderItem=OrderItem)
+    return dict(db=db, User=User, Role=Role, Customer=Customer, Product=Product, Order=Order, OrderItem=OrderItem)
