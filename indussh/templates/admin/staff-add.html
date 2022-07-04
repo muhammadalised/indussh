@@ -4,32 +4,84 @@
         <div class="col-md-2"></div>
         <div class="col-md-10">
             <div class="text-center">
-                <h1 class="h4 text-gray-900 mb-4">Create an Admin</h1>
+                <h1 class="h4 text-gray-900 mb-4">Add a Staff</h1>
             </div>
-            {% from "shared/_formhelpers.html" import render_field %}
-            <form class="user" method="POST" action="" enctype="multipart/form-data">
+            <form class="user" method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
                 <div class="form-group">
-                    {{ render_field(form.name, class_="form-control") }}
+                    {% if form.name.errors %}
+                        {{ form.name(class="form-control form-control-user is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.name.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.name(class="form-control form-control-user") }}
+                    {% endif %}
                 </div>
                 <div class="form-group">
-                    {{ render_field(form.email, class_="form-control") }}
+                    {% if form.username.errors %}
+                        {{ form.username(class="form-control form-control-user is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.username.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.username(class="form-control form-control-user") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {% if form.email.errors %}
+                        {{ form.email(class="form-control form-control-user is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.email(class="form-control form-control-user", placeholder="Email Address...") }}
+                    {% endif %}
                 </div>
                 <div class="form-group row">
-                    <div class="col-sm-6 mb-3 mb-sm-0">
-                        {{ render_field(form.password, class_="form-control") }}
+                    <div class="form-group col-sm-6 mb-3 mb-sm-0">
+                        {% if form.password.errors %}
+                            {{ form.password(class="form-control form-control-user is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.password.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.password(class="form-control form-control-user") }}
+                        {% endif %}
                     </div>
-                    <div class="col-sm-6">
-                        {{ render_field(form.confirm_password, class_="form-control") }}
+                    <div class="form-group col-sm-6">
+                        {% if form.confirm_password.errors %}
+                            {{ form.confirm_password(class="form-control form-control-user is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.confirm_password.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.confirm_password(class="form-control form-control-user") }}
+                        {% endif %}
                     </div>
                 </div>
-
-                <div class="custom-file mb-3">
-                    <input type="file" class="custom-file-input" id="customFile" name="image">
-                    <label class="custom-file-label" for="customFile">Choose Image file</label>
+                <div class="form-group custom-file mb-3">
+                    {{ form.image_file.label(class="custom-file-label") }}
+                    {{ form.image_file(class="form-control-file custom-file-input") }}
+                    {% if form.image_file.errors %}
+                        {% for error in form.image_file.errors %}
+                            <span class="text-danger">{{ error }}</span></br>
+                        {% endfor %}
+                    {% endif %}
                 </div>
-                <button type="submit" class="btn btn-primary">
-                    Create Admin
-                </button>
+                <div class="form-group text-center">
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
             </form>
         </div>
            

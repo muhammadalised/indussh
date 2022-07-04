@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import StringField, TextAreaField, PasswordField, IntegerField, SubmitField, BooleanField
+from wtforms import StringField, TextAreaField, PasswordField, IntegerField, SubmitField, BooleanField, SelectField
 from wtforms.validators import DataRequired, Length, EqualTo, Email, ValidationError
 
 class AdminLoginForm(FlaskForm):
@@ -13,14 +13,17 @@ class AdminLoginForm(FlaskForm):
 
     submit = SubmitField('Login')
 
-class StaffForm(FlaskForm):
-    name = StringField('Name', [Length(min=1, max=100)], render_kw={"placeholder": "Name"})
-    email = StringField('Email', [Length(min=4, max=50), Email(), DataRequired()], render_kw={"placeholder": "Email"})
-    password = PasswordField('Password', validators=[DataRequired()], render_kw={"placeholder": "Password"})
+class AddStaffForm(FlaskForm):
+    name = StringField('Name', [Length(min=3, max=100)], render_kw={"placeholder": "Name..."})
+    username = StringField('User Name', [Length(min=3, max=100)], render_kw={"placeholder": "User Name..."})
+    email = StringField('Email', [Length(min=4, max=50), Email(), DataRequired()], render_kw={"placeholder": "Email Address..."})
+    password = PasswordField('Password', validators=[DataRequired()], render_kw={"placeholder": "Password..."})
     confirm_password = PasswordField('Confirm Password',
                                      validators=[
                                          EqualTo('password', message='Passwords do not match')],
-                                     render_kw={"placeholder": "Confirm Password"})
+                                     render_kw={"placeholder": "Confirm Password..."})
+    role = SelectField(validators=[DataRequired()], coerce=int)
+    image_file = FileField('Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Add Staff')
 
 class ProductForm(FlaskForm):
