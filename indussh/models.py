@@ -14,14 +14,14 @@ class Permission:
     ADD_USER = 4
     
     UPDATE_PRODUCT = 8
-    UPDATE_ORDER = 12
-    UPDATE_USER = 16
+    UPDATE_ORDER = 16
+    UPDATE_USER = 32
     
-    DELETE_PRODUCT = 32
-    DELETE_ORDER = 64
-    DELETE_USER = 128
+    DELETE_PRODUCT = 64
+    DELETE_ORDER = 128
+    DELETE_USER = 256
     
-    ADMIN = 256
+    ADMIN = 512
 
 class Role(db.Model):
     __tablename__ = 'roles'
@@ -122,7 +122,7 @@ class User(db.Model, UserMixin):
     
     @staticmethod
     def create_admin():
-        admin = User(username='admin', email='admin@indussh.com', password="admin123", role_id=2)
+        admin = User(username='admin', email='admin@indussh.com', password="admin123", role_id=3)
         db.session.add(admin)
         db.session.commit()
         print('Admin Created!')
