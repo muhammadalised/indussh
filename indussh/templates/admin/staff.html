@@ -43,9 +43,14 @@
                             <td>{{ staff.username }}</td>
                             <td>{{ staff.email }}</td>
                             <td>{{ staff.created_on }}</td>
-                            <td><a href="#" class="btn btn-danger btn-circle btn-sm">
-                                <i class="fas fa-trash"></i>
-                            </a></td>
+                            <td>
+                              
+                              <form action="{{ url_for('admin.delete_staff', staff_id=staff.id) }}" method="POST">
+                                <button type="submit" class="btn btn-danger btn-circle btn-sm">
+                                  <i class="fas fa-trash"></i>
+                                </button>
+                              </form>
+                            </td>
                         </tr>
                     {% endfor %}
                   </tbody>

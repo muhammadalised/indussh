@@ -1,6 +1,7 @@
-from flask import Flask, render_template, redirect, url_for, Blueprint, flash, request
+from flask import Flask, render_template, redirect, url_for, Blueprint, flash, request, current_app
 from flask_login import current_user, login_user, logout_user, login_required
 from .forms import AdminLoginForm, AddStaffForm, ProductForm
+from indussh.models import db
 from indussh.models import Product, User, Order, Role
 from indussh.admin.utils import save_picture
 
@@ -73,12 +74,16 @@ def add_staff():
         return redirect(url_for('admin.add_staff'))
     return render_template('admin/staff-add.html', form=form)
 
-@admin.route('/delete-staff/<int:id>')
+@admin.route('/<int:staff_id>/staff-delete', methods=['POST'])
 @login_required
-def delete_staff(id):
-    pass
+def delete_staff(staff_id):
+    staff = User.query.get_or_404(staff_id)
+    db.session.delete(staff)
+    db.session.commit()
+    flash('Staff record deleted successfully', 'success')
+    return redirect(url_for('admin.display_staff'))
 
-@admin.route('/edit-staff/<int:id>')
+@admin.route('/<int:staff_id>/staff-update')
 @login_required
 def edit_staff(id):
     pass
