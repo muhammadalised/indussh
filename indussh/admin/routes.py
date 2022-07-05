@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, url_for, Blueprint, flash, r
 from flask_login import current_user, login_user, logout_user, login_required
 from .forms import AdminLoginForm, AddStaffForm, ProductForm
 from indussh.models import Product, User, Order, Role
+from indussh.admin.utils import save_picture
 
 admin = Blueprint('admin', __name__)
 
@@ -56,7 +57,20 @@ def add_staff():
     form.role.choices = role_choices
 
     if form.validate_on_submit():
-        print(form.data)
+        user = User(
+            username = form.username.data,
+            name = form.name.data,
+            email = form.email.data,
+            password = form.password.data,
+        )
+        if form.image_file.data:
+            image_file = save_picture(form.image_file.data)
+            user.image_file = image_file
+        
+        user.create()
+        
+        flash('Staff member added successfully!', 'success')
+        return redirect(url_for('admin.add_staff'))
     return render_template('admin/staff-add.html', form=form)
 
 @admin.route('/delete-staff/<int:id>')
