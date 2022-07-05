@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, Blueprint, flash, request
 from flask_login import current_user, login_user, logout_user, login_required
 from .forms import AdminLoginForm, AddStaffForm, ProductForm
-from indussh.models import Product, User, Order
+from indussh.models import Product, User, Order, Role
 
 admin = Blueprint('admin', __name__)
 
@@ -49,7 +49,12 @@ def display_staff():
 @admin.route('/add-staff', methods=['GET', 'POST'])
 @login_required
 def add_staff():
+    roles = Role.query.all()
+    role_choices = [(r.id, r.name) for r in roles]
+    role_choices.insert(0, (0, "Select a Role"))
     form = AddStaffForm()
+    form.role.choices = role_choices
+
     if form.validate_on_submit():
         print(form.data)
     return render_template('admin/staff-add.html', form=form)

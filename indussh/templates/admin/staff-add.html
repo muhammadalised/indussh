@@ -10,65 +10,77 @@
                 {{ form.hidden_tag() }}
                 <div class="form-group">
                     {% if form.name.errors %}
-                        {{ form.name(class="form-control form-control-user is-invalid") }}
+                        {{ form.name(class="form-control is-invalid") }}
                         <div class="invalid-feedback">
                             {% for error in form.name.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ form.name(class="form-control form-control-user") }}
+                        {{ form.name(class="form-control") }}
                     {% endif %}
                 </div>
                 <div class="form-group">
                     {% if form.username.errors %}
-                        {{ form.username(class="form-control form-control-user is-invalid") }}
+                        {{ form.username(class="form-control is-invalid") }}
                         <div class="invalid-feedback">
                             {% for error in form.username.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ form.username(class="form-control form-control-user") }}
+                        {{ form.username(class="form-control") }}
                     {% endif %}
                 </div>
                 <div class="form-group">
                     {% if form.email.errors %}
-                        {{ form.email(class="form-control form-control-user is-invalid") }}
+                        {{ form.email(class="form-control is-invalid") }}
                         <div class="invalid-feedback">
                             {% for error in form.email.errors %}
                                 <span>{{ error }}</span>
                             {% endfor %}
                         </div>
                     {% else %}
-                        {{ form.email(class="form-control form-control-user", placeholder="Email Address...") }}
+                        {{ form.email(class="form-control", placeholder="Email Address...") }}
                     {% endif %}
                 </div>
                 <div class="form-group row">
                     <div class="form-group col-sm-6 mb-3 mb-sm-0">
                         {% if form.password.errors %}
-                            {{ form.password(class="form-control form-control-user is-invalid") }}
+                            {{ form.password(class="form-control is-invalid") }}
                             <div class="invalid-feedback">
                                 {% for error in form.password.errors %}
                                     <span>{{ error }}</span>
                                 {% endfor %}
                             </div>
                         {% else %}
-                            {{ form.password(class="form-control form-control-user") }}
+                            {{ form.password(class="form-control") }}
                         {% endif %}
                     </div>
                     <div class="form-group col-sm-6">
                         {% if form.confirm_password.errors %}
-                            {{ form.confirm_password(class="form-control form-control-user is-invalid") }}
+                            {{ form.confirm_password(class="form-control is-invalid") }}
                             <div class="invalid-feedback">
                                 {% for error in form.confirm_password.errors %}
                                     <span>{{ error }}</span>
                                 {% endfor %}
                             </div>
                         {% else %}
-                            {{ form.confirm_password(class="form-control form-control-user") }}
+                            {{ form.confirm_password(class="form-control") }}
                         {% endif %}
                     </div>
+                </div>
+                <div class="form-group">
+                    {% if form.role.errors %}
+                        {{ form.role(class="form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.role.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.role(class="form-control") }}
+                    {% endif %}
                 </div>
                 <div class="form-group custom-file mb-3">
                     {{ form.image_file.label(class="custom-file-label") }}

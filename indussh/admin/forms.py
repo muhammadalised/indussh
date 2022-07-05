@@ -14,8 +14,8 @@ class AdminLoginForm(FlaskForm):
     submit = SubmitField('Login')
 
 class AddStaffForm(FlaskForm):
-    name = StringField('Name', [Length(min=3, max=100)], render_kw={"placeholder": "Name..."})
-    username = StringField('User Name', [Length(min=3, max=100)], render_kw={"placeholder": "User Name..."})
+    name = StringField('Name', [Length(min=3, max=100), DataRequired()], render_kw={"placeholder": "Name..."})
+    username = StringField('User Name', [Length(min=3, max=100), DataRequired()], render_kw={"placeholder": "User Name..."})
     email = StringField('Email', [Length(min=4, max=50), Email(), DataRequired()], render_kw={"placeholder": "Email Address..."})
     password = PasswordField('Password', validators=[DataRequired()], render_kw={"placeholder": "Password..."})
     confirm_password = PasswordField('Confirm Password',
