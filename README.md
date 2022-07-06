@@ -5,7 +5,3 @@
 - Flask
 - Scikit-Learn
 - Tensorflow
-
-### Todos
-1. Customize flask admin
-2. Integrate the chatbot into website
