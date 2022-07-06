@@ -83,10 +83,15 @@ def delete_staff(staff_id):
     flash('Staff record deleted successfully', 'success')
     return redirect(url_for('admin.display_staff'))
 
-@admin.route('/<int:staff_id>/staff-update')
-@login_required
-def edit_staff(id):
-    pass
+# @admin.route('/<int:staff_id>/staff-update', methods=['GET', 'POST'])
+# @login_required
+# def edit_staff(staff_id):
+#     staff = User.query.get_or_404(staff_id)
+#     form = AddStaffForm()
+#     if form.validate_on_submit():
+#         pass
+
+#     return render_template('staff-update.html', form=form)
 
 @admin.route('/customers')
 @login_required

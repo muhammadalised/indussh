@@ -17,28 +17,28 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
-                      <th>Avatar</th>
+                      <th>Photo</th>
                       <th>ID</th>
                       <th>Name</th>
                       <th>Email</th>
                       <th>Created on</th>
-                      <th>Delete</th>
+                      <th>Options</th>
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
-                        <th>Avatar</th>
+                        <th>Photo</th>
                         <th>ID</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Created on</th>
-                        <th>Delete</th>
+                        <th>Options</th>
                     </tr>
                   </tfoot>
                   <tbody>
                     {% for staff in staff_users %}
                         <tr>
-                            <td><img src="{{ url_for('static', filename='uploads/profile_pics/' + staff.image_file) }}" alt="avatar" width="40" height="40"></td>
+                            <td><img src="{{ url_for('static', filename='uploads/profile_pics/' + staff.image_file) }}" alt="photo" width="50" height="50"></td>
                             <td>{{ staff.id }}</td>
                             <td>{{ staff.username }}</td>
                             <td>{{ staff.email }}</td>
