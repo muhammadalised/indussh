@@ -42,9 +42,6 @@ class Role(db.Model):
     def insert_roles():
         roles = {
             'Customer': [],
-            'Staff': [Permission.ADD_PRODUCT, Permission.UPDATE_PRODUCT,
-                        Permission.DELETE_PRODUCT, Permission.ADD_ORDER, 
-                        Permission.UPDATE_ORDER, Permission.DELETE_ORDER],
             'Administrator': [Permission.ADD_USER, Permission.ADD_PRODUCT, 
                                 Permission.ADD_ORDER, Permission.UPDATE_ORDER,
                                 Permission.UPDATE_USER, Permission.UPDATE_PRODUCT,
@@ -75,8 +72,6 @@ class Role(db.Model):
     def has_permission(self, perm):
         return self.permissions & perm == perm
     
-    
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -143,9 +138,10 @@ class Customer(db.Model):
     email = db.Column(db.String(50), nullable=False, unique=True)
     phone_number = db.Column(db.String(20))
 
+    # This will be null if the customer is a guest user
+    # This will have a user_id for the customers who signs up
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     orders = db.relationship('Order', backref='customer')
-
 
 class Product(db.Model):
     __tablename__ = 'products'
