@@ -8,6 +8,22 @@
             </div>
             <form class="user" method="POST" enctype="multipart/form-data">
                 {{ form.hidden_tag() }}
+                <div class="text-center">
+                    <img src="{{ url_for('static', filename='uploads/profile_pics/' + current_user.image_file) }}" height="80" width="80" alt="Profile Pic">
+                </div>
+                <div class="form-group custom-file mb-3 mt-3">
+                    {{ form.image_file.label(class="custom-file-label") }}
+                    {{ form.image_file(class="form-control-file custom-file-input", id="file-upload") }}
+                    <span class="text text-muted" id="file-name"></span>
+                    {% if form.image_file.errors %}
+                        {% for error in form.image_file.errors %}
+                            <span class="text-danger">{{ error }}</span></br>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <span class="text text-muted font-weight-bold">Access Level: </span><span>{{ current_user.role.name }}</span>
+                </div>
                 <div class="form-group">
                     {{ form.name.label(class="text-muted text-sm") }}
                     {% if form.name.errors %}
@@ -47,17 +63,7 @@
                         {{ form.email(class="form-control", placeholder="Email Address...") }}
                     {% endif %}
                 </div>
-                {{ form.image_file.label(class="text-muted text-sm") }}
-                <div class="form-group custom-file mb-3">
-                    {{ form.image_file.label(class="custom-file-label") }}
-                    {{ form.image_file(class="form-control-file custom-file-input", id="file-upload") }}
-                    <span class="text text-muted" id="file-name"></span>
-                    {% if form.image_file.errors %}
-                        {% for error in form.image_file.errors %}
-                            <span class="text-danger">{{ error }}</span></br>
-                        {% endfor %}
-                    {% endif %}
-                </div>
+                
                 <div class="form-group text-center">
                     {{ form.submit(class="btn btn-lg btn-primary") }}
                 </div>
