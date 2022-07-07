@@ -48,7 +48,12 @@ def display_admins():
     admins = User.query.all()
     return render_template('admin/admins.html', admins=admins)
 
-@admin.route('/add-admin', methods=['GET', 'POST'])
+@admin.route('/<int:admin_id>/profile')
+@login_required
+def admin_profile():
+    return render_template('admin/admin-profile.html')
+
+@admin.route('/add', methods=['GET', 'POST'])
 @login_required
 def add_admin():
     roles = Role.query.all()
@@ -72,9 +77,9 @@ def add_admin():
         
         flash('Staff member added successfully!', 'success')
         return redirect(url_for('admin.add_admin'))
-    return render_template('admin/staff-add.html', form=form)
+    return render_template('admin/admin-add.html', form=form)
 
-@admin.route('/<int:admin_id>/admin-delete', methods=['POST'])
+@admin.route('/<int:admin_id>/delete', methods=['POST'])
 @login_required
 def delete_admin(admin_id):
     staff = User.query.get_or_404(admin_id)
@@ -82,16 +87,6 @@ def delete_admin(admin_id):
     db.session.commit()
     flash('Admin record deleted successfully', 'success')
     return redirect(url_for('admin.display_admin'))
-
-# @admin.route('/<int:staff_id>/staff-update', methods=['GET', 'POST'])
-# @login_required
-# def edit_staff(staff_id):
-#     staff = User.query.get_or_404(staff_id)
-#     form = AddStaffForm()
-#     if form.validate_on_submit():
-#         pass
-
-#     return render_template('staff-update.html', form=form)
 
 @admin.route('/customers')
 @login_required

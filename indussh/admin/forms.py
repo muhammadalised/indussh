@@ -24,7 +24,7 @@ class AddStaffForm(FlaskForm):
                                      render_kw={"placeholder": "Confirm Password..."})
     role = SelectField(validators=[DataRequired()], coerce=int)
     image_file = FileField('Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
-    submit = SubmitField('Add Staff')
+    submit = SubmitField('Add')
 
 class ProductForm(FlaskForm):
     article = StringField('Product Article No', [

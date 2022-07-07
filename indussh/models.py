@@ -78,7 +78,8 @@ class Role(db.Model):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# UserMixin is a class that we need to inherit so that we do not need to implement it's methods and use it's default methods
+# UserMixin is a class that we need to inherit 
+# so that we do not need to implement it's methods and use it's default methods
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
@@ -207,8 +208,7 @@ class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     amount = db.Column(db.Integer, nullable=False)
     completed = db.Column(db.Boolean, default=False)
-    date_created = db.Column(
-        db.DateTime, nullable=False, default=datetime.utcnow)
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     date_completed = db.Column(db.DateTime)
 
     customer_id = db.Column(db.Integer, db.ForeignKey('customers.id'), nullable=False)
