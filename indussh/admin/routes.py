@@ -1,6 +1,7 @@
+from multiprocessing.dummy import current_process
 from flask import Flask, render_template, redirect, url_for, Blueprint, flash, request, current_app
 from flask_login import current_user, login_user, logout_user, login_required
-from .forms import AdminLoginForm, AddStaffForm, ProductForm
+from .forms import AdminCreateForm, AdminLoginForm, ProductForm, AdminUpdateForm
 from indussh.models import db
 from indussh.models import Product, User, Order, Role
 from indussh.admin.utils import save_picture
@@ -48,10 +49,29 @@ def display_admins():
     admins = User.query.all()
     return render_template('admin/admins.html', admins=admins)
 
-@admin.route('/<int:admin_id>/profile')
+@admin.route('/profile', methods=['GET', 'POST'])
 @login_required
 def admin_profile():
-    return render_template('admin/admin-profile.html')
+     # TODO: Add functionality to update password as well
+    form = AdminUpdateForm()
+    if form.validate_on_submit():
+        if form.image_file.data:
+            image_file = save_picture(form.image_file.data)
+            current_user.image_file = image_file
+        
+        current_user.name = form.name.data
+        current_user.username = form.username.data
+        current_user.email = form.email.data
+        db.session.commit()
+        flash('Your profile has been updated!', 'success')
+        return redirect(url_for('admin.admin_profile'))
+    elif request.method == 'GET':
+         # Populate the form fields with data from the database
+        form.name.data = current_user.name
+        form.username.data = current_user.username
+        form.email.data = current_user.email
+
+    return render_template('admin/admin-profile.html', form=form)
 
 @admin.route('/add', methods=['GET', 'POST'])
 @login_required
@@ -59,15 +79,17 @@ def add_admin():
     roles = Role.query.all()
     role_choices = [(r.id, r.name) for r in roles]
     role_choices.insert(0, (0, "Select a Role"))
-    form = AddStaffForm()
+    form = AdminCreateForm()
     form.role.choices = role_choices
 
     if form.validate_on_submit():
+        
         user = User(
             username = form.username.data,
             name = form.name.data,
             email = form.email.data,
             password = form.password.data,
+            role_id = form.role.data
         )
         if form.image_file.data:
             image_file = save_picture(form.image_file.data)
@@ -86,7 +108,7 @@ def delete_admin(admin_id):
     db.session.delete(staff)
     db.session.commit()
     flash('Admin record deleted successfully', 'success')
-    return redirect(url_for('admin.display_admin'))
+    return redirect(url_for('admin.display_admins'))
 
 @admin.route('/customers')
 @login_required

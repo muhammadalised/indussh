@@ -1,0 +1,78 @@
+{% extends 'admin/admin_layout.html' %}
+{% block body %}
+    <div class="container row">
+        <div class="col-md-2"></div>
+        <div class="col-md-10">
+            <div class="text-center">
+                <h1 class="h4 text-gray-900 mb-4">Update your Profile</h1>
+            </div>
+            <form class="user" method="POST" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.name.label(class="text-muted text-sm") }}
+                    {% if form.name.errors %}
+                        {{ form.name(class="form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.name.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.name(class="form-control") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.username.label(class="text-muted text-sm") }}
+                    {% if form.username.errors %}
+                        {{ form.username(class="form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.username.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.username(class="form-control") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    {{ form.email.label(class="text-muted text-sm") }}
+                    {% if form.email.errors %}
+                        {{ form.email(class="form-control is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in form.email.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ form.email(class="form-control", placeholder="Email Address...") }}
+                    {% endif %}
+                </div>
+                {{ form.image_file.label(class="text-muted text-sm") }}
+                <div class="form-group custom-file mb-3">
+                    {{ form.image_file.label(class="custom-file-label") }}
+                    {{ form.image_file(class="form-control-file custom-file-input", id="file-upload") }}
+                    <span class="text text-muted" id="file-name"></span>
+                    {% if form.image_file.errors %}
+                        {% for error in form.image_file.errors %}
+                            <span class="text-danger">{{ error }}</span></br>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="form-group text-center">
+                    {{ form.submit(class="btn btn-lg btn-primary") }}
+                </div>
+            </form>
+        </div>
+           
+    </div>
+       
+{% endblock %}
+{% block custom_scripts %}
+    <script type="text/javascript">
+        $('#file-upload').change(function() {
+            var i = $(this).prev('label').clone();
+            var file = $('#file-upload')[0].files[0].name;
+            $(this).prev('label').text(file);
+        });
+    </script>
+{% endblock custom_scripts %}

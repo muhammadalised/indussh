@@ -184,14 +184,14 @@
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="{{ url_for('admin.admin_profile') }}">
                   <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Profile
+                  My Account
                 </a>
-                <a class="dropdown-item" href="#">
+                <!-- <a class="dropdown-item" href="#">
                   <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                   Settings
-                </a>
+                </a> -->
 
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="" data-toggle="modal" data-target="#logoutModal">
@@ -275,6 +275,13 @@
     <script src="https://cdn.ckeditor.com/4.11.3/standard/ckeditor.js"></script>
     <script type="text/javascript">
         CKEDITOR.replace('editor')
+    </script>
+    <script type="text/javascript">
+      $('#file-upload').change(function() {
+          var i = $(this).prev('label').clone();
+          var file = $('#file-upload')[0].files[0].name;
+          $(this).prev('label').text(file);
+      });
     </script>
 
     {% block custom_scripts %}

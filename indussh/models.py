@@ -119,6 +119,12 @@ class User(db.Model, UserMixin):
             return True
         return False
     
+    def email_exists(self, email):
+        user = self.query.filter_by(email=self.email)
+        if user:
+            return True
+        return False
+    
     @staticmethod
     def create_admin():
         admin = User(username='admin', email='admin@indussh.com', password="admin123", role_id=3)

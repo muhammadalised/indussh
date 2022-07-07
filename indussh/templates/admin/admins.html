@@ -19,6 +19,7 @@
                     <tr>
                       <th>Photo</th>
                       <th>ID</th>
+                      <th>Username</th>
                       <th>Name</th>
                       <th>Email</th>
                       <th>Created on</th>
@@ -29,6 +30,7 @@
                     <tr>
                         <th>Photo</th>
                         <th>ID</th>
+                        <th>Username</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Created on</th>
@@ -36,16 +38,16 @@
                     </tr>
                   </tfoot>
                   <tbody>
-                    {% for staff in staff_users %}
+                    {% for admin in admins %}
                         <tr>
-                            <td><img src="{{ url_for('static', filename='uploads/profile_pics/' + staff.image_file) }}" alt="photo" width="50" height="50"></td>
-                            <td>{{ staff.id }}</td>
-                            <td>{{ staff.username }}</td>
-                            <td>{{ staff.email }}</td>
-                            <td>{{ staff.created_on }}</td>
+                            <td><img src="{{ url_for('static', filename='uploads/profile_pics/' + admin.image_file) }}" alt="photo" width="50" height="50"></td>
+                            <td>{{ admin.id }}</td>
+                            <td>{{ admin.username }}</td>
+                            <td>{{ admin.name }}</td>
+                            <td>{{ admin.email }}</td>
+                            <td>{{ admin.created_on }}</td>
                             <td>
-                              
-                              <form action="{{ url_for('admin.delete_staff', staff_id=staff.id) }}" method="POST">
+                              <form action="{{ url_for('admin.delete_admin', admin_id=admin.id) }}" method="POST">
                                 <button type="submit" class="btn btn-danger btn-circle btn-sm">
                                   <i class="fas fa-trash"></i>
                                 </button>
