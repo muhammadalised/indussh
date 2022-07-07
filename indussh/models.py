@@ -42,7 +42,9 @@ class Role(db.Model):
     def insert_roles():
         roles = {
             'Customer': [],
-            'Administrator': [Permission.ADD_USER, Permission.ADD_PRODUCT, 
+            'Administrator': [Permission.ADD_PRODUCT, Permission.ADD_ORDER, Permission.UPDATE_ORDER,
+                                Permission.UPDATE_PRODUCT, Permission.DELETE_PRODUCT,Permission.DELETE_ORDER],
+            'Super-Administrator': [Permission.ADD_USER, Permission.ADD_PRODUCT, 
                                 Permission.ADD_ORDER, Permission.UPDATE_ORDER,
                                 Permission.UPDATE_USER, Permission.UPDATE_PRODUCT,
                                 Permission.DELETE_USER, Permission.DELETE_PRODUCT,

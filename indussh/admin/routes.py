@@ -42,15 +42,15 @@ def dashboard():
                             staff_count=staff_count,
                             orders_count=orders_count)
 
-@admin.route('/staff')
+@admin.route('/admins')
 @login_required
-def display_staff():
-    staff_users = User.query.all()
-    return render_template('admin/staff.html', staff_users=staff_users)
+def display_admins():
+    admins = User.query.all()
+    return render_template('admin/admins.html', admins=admins)
 
-@admin.route('/add-staff', methods=['GET', 'POST'])
+@admin.route('/add-admin', methods=['GET', 'POST'])
 @login_required
-def add_staff():
+def add_admin():
     roles = Role.query.all()
     role_choices = [(r.id, r.name) for r in roles]
     role_choices.insert(0, (0, "Select a Role"))
@@ -71,17 +71,17 @@ def add_staff():
         user.create()
         
         flash('Staff member added successfully!', 'success')
-        return redirect(url_for('admin.add_staff'))
+        return redirect(url_for('admin.add_admin'))
     return render_template('admin/staff-add.html', form=form)
 
-@admin.route('/<int:staff_id>/staff-delete', methods=['POST'])
+@admin.route('/<int:admin_id>/admin-delete', methods=['POST'])
 @login_required
-def delete_staff(staff_id):
-    staff = User.query.get_or_404(staff_id)
+def delete_admin(admin_id):
+    staff = User.query.get_or_404(admin_id)
     db.session.delete(staff)
     db.session.commit()
-    flash('Staff record deleted successfully', 'success')
-    return redirect(url_for('admin.display_staff'))
+    flash('Admin record deleted successfully', 'success')
+    return redirect(url_for('admin.display_admin'))
 
 # @admin.route('/<int:staff_id>/staff-update', methods=['GET', 'POST'])
 # @login_required
