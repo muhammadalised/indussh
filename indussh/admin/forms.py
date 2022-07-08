@@ -38,7 +38,7 @@ class AdminUpdateForm(FlaskForm):
     image_file = FileField('Profile Picture', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Update')
 
-class ProductForm(FlaskForm):
+class ProductAddForm(FlaskForm):
     article = StringField('Product Article No', [
         Length(min=1, max=100),
         DataRequired()],

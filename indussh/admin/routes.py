@@ -1,9 +1,8 @@
-from multiprocessing.dummy import current_process
 from flask import Flask, render_template, redirect, url_for, Blueprint, flash, request, current_app
 from flask_login import current_user, login_user, logout_user, login_required
-from .forms import AdminCreateForm, AdminLoginForm, ProductForm, AdminUpdateForm
-from indussh.models import db
-from indussh.models import Product, Customer, User, Order, Role
+
+from .forms import AdminCreateForm, AdminLoginForm, ProductAddForm, AdminUpdateForm
+from indussh.models import db, Product, Customer, User, Order, Role
 from indussh.admin.utils import save_picture
 
 from sqlalchemy import func
@@ -131,7 +130,8 @@ def display_products():
 @admin.route('/add-product')
 @login_required
 def add_product():
-    return render_template('admin/products-add.html')
+    form = ProductAddForm()
+    return render_template('admin/products-add.html', form=form)
 
 @admin.route('/delete-product/<int:product_id>')
 @login_required
