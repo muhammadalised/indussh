@@ -69,6 +69,11 @@
             </li>
 
             <!-- Nav Item - Alerts -->
+            <li class="nav-item dropdown no-arrow mx-1">
+              <a class="nav-link" href="{{ url_for('main.index') }}" role="button" data-toggle="tooltip" data-placement="bottom" title="View Store"  aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-store fa-fw"></i>
+              </a>
+            </li>
             
             <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -205,7 +210,7 @@
 
         </nav>
         <div class="container-fluid">
-            {% include 'shared/_messages.html' %}
+            {% include 'admin/includes/_messages.html' %}
         </div>
         <!-- End of Topbar -->
             {% block body %}

@@ -6,7 +6,7 @@ from indussh.models import db
 from indussh.models import Product, User, Order, Role
 from indussh.admin.utils import save_picture
 
-admin = Blueprint('admin', __name__)
+admin = Blueprint('admin', __name__, template_folder='templates')
 
 @admin.route('/login', methods=['GET', 'POST'])
 def login():
