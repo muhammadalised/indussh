@@ -69,11 +69,6 @@
             </li>
 
             <!-- Nav Item - Alerts -->
-            <li class="nav-item dropdown no-arrow mx-1">
-              <a class="nav-link" href="{{ url_for('main.index') }}" role="button" data-toggle="tooltip" data-placement="bottom" title="View Store"  aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-store fa-fw"></i>
-              </a>
-            </li>
             
             <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -179,13 +174,19 @@
               </div> -->
             </li>
 
+            <li class="nav-item dropdown no-arrow mx-1">
+              <a class="nav-link" href="{{ url_for('main.index') }}" role="button" data-toggle="tooltip" data-placement="bottom" title="View Store"  aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-store fa-fw"></i>
+              </a>
+            </li>
+
             <div class="topbar-divider d-none d-sm-block"></div>
 
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ current_user.username }}</span>
-                <img class="img-profile rounded-circle" src="{{ url_for('static', filename='uploads/profile_pics/' + current_user.image_file) }}">
+                <img class="img-profile rounded-circle" src="{{ url_for('static', filename='uploads/profile_images/' + current_user.image_file) }}">
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">

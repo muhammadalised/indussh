@@ -40,7 +40,7 @@ class AdminUpdateForm(FlaskForm):
 
 class ProductAddForm(FlaskForm):
     article = StringField('Product Article No', [
-        Length(min=1, max=100),
+        Length(min=1, max=10),
         DataRequired()],
         render_kw={"placeholder": "Article No"})
     name = StringField('Product Name', [

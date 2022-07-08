@@ -177,6 +177,11 @@ class Product(db.Model):
     def __repr__(self):
         return f"Product('{self.article_no}', '{self.name}', '{self.price}')"
     
+    def create(self):
+        db.session.add(self)
+        db.session.commit()
+        return self
+    
     @staticmethod
     def insert_products():
         columns = [

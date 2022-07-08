@@ -7,6 +7,11 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     PRODUCTS_DATA_PATH = os.path.join(basedir, 'seed_data/Products.csv')
+    PROFILE_IMAGES_PATH = 'static/uploads/profile_images'
+    PRODUCT_IMAGES_PATH = 'static/uploads/product_images'
+
+    PROFILE_IMAGE_SIZE = (125, 125)
+    PRODUCT_IMAGE_SIZE = (480, 340)
 
     @staticmethod
     def init_app(app):

@@ -1,9 +1,11 @@
+from nis import cat
+from unicodedata import category
 from flask import Flask, render_template, redirect, url_for, Blueprint, flash, request, current_app
 from flask_login import current_user, login_user, logout_user, login_required
 
 from .forms import AdminCreateForm, AdminLoginForm, ProductAddForm, AdminUpdateForm
 from indussh.models import db, Product, Customer, User, Order, Role
-from indussh.admin.utils import save_picture
+from indussh.admin.utils import save_picture, clean_text
 
 from sqlalchemy import func
 
@@ -61,7 +63,9 @@ def admin_profile():
     form = AdminUpdateForm()
     if form.validate_on_submit():
         if form.image_file.data:
-            image_file = save_picture(form.image_file.data)
+            image_file = save_picture(form.image_file.data, 
+                                        current_app.config['PROFILE_IMAGES_PATH'],
+                                        current_app.config['PROFILE_IMAGE_SIZE'])
             current_user.image_file = image_file
         
         current_user.name = form.name.data
@@ -97,7 +101,9 @@ def add_admin():
             role_id = form.role.data
         )
         if form.image_file.data:
-            image_file = save_picture(form.image_file.data)
+            image_file = save_picture(form.image_file.data, 
+                                        current_app.config['PROFILE_IMAGES_PATH'],
+                                        current_app.config['PROFILE_IMAGE_SIZE'])
             user.image_file = image_file
         
         user.create()
@@ -124,13 +130,33 @@ def display_customers():
 @admin.route('/products')
 @login_required
 def display_products():
-    products = Product.query.all()
+    products = Product.query.order_by(Product.added_on.desc()).all()
     return render_template('admin/products.html', products=products)
 
-@admin.route('/add-product')
+@admin.route('/add-product', methods=['GET', 'POST'])
 @login_required
 def add_product():
     form = ProductAddForm()
+    if form.validate_on_submit():
+        product = Product(
+            article_no=form.article.data, name=form.name.data,
+            description=clean_text(form.description.data), type=form.type.data, 
+            category=form.category.data, price=form.price.data, 
+            minimum_price=form.min_price.data,
+            size_sm=form.size_s.data, size_md=form.size_m.data,
+            size_l=form.size_l.data, size_xl=form.size_xl.data
+        )
+        
+        if form.image_file.data:
+            image_file = save_picture(form.image_file.data, 
+                                        current_app.config['PRODUCT_IMAGES_PATH'],
+                                        current_app.config['PRODUCT_IMAGE_SIZE'])
+            product.image_file = image_file
+        
+        product.create()
+        flash('Product Added Successfully', 'success')
+        return redirect(url_for('admin.add_product'))
+
     return render_template('admin/products-add.html', form=form)
 
 @admin.route('/delete-product/<int:product_id>')
