@@ -3,10 +3,28 @@ from flask import Flask, render_template, redirect, url_for, Blueprint, flash, r
 from flask_login import current_user, login_user, logout_user, login_required
 from .forms import AdminCreateForm, AdminLoginForm, ProductForm, AdminUpdateForm
 from indussh.models import db
-from indussh.models import Product, User, Order, Role
+from indussh.models import Product, Customer, User, Order, Role
 from indussh.admin.utils import save_picture
 
+from sqlalchemy import func
+
 admin = Blueprint('admin', __name__, template_folder='templates')
+
+@admin.route('/')
+@admin.route('/dashboard')
+@login_required
+def dashboard():
+    product_count = Product.query.count()
+    customer_count = Customer.query.count()
+    order_count = Order.query.count()
+    total_sales = Order.query.with_entities(func.sum(Order.amount).label('total_sales')).filter(Order.completed==True).first().total_sales
+    avg_order_sale = int(Order.query.with_entities(func.avg(Order.amount).label('avg_order_sale')).filter(Order.completed==True).first().avg_order_sale)
+    return render_template('admin/dashboard.html', 
+                            product_count=product_count,
+                            customer_count=customer_count,
+                            order_count=order_count,
+                            total_sales=total_sales,
+                            avg_order_sale=avg_order_sale)
 
 @admin.route('/login', methods=['GET', 'POST'])
 def login():
@@ -30,18 +48,6 @@ def logout():
     logout_user()
     flash('You have been logged out.', 'info')
     return redirect(url_for('admin.login'))
-
-@admin.route('/')
-@admin.route('/dashboard')
-@login_required
-def dashboard():
-    products_count = Product.query.count()
-    staff_count = User.query.count()
-    orders_count = Order.query.count()
-    return render_template('admin/dashboard.html', 
-                            products_count=products_count,
-                            staff_count=staff_count,
-                            orders_count=orders_count)
 
 @admin.route('/admins')
 @login_required
@@ -76,7 +82,7 @@ def admin_profile():
 @admin.route('/add', methods=['GET', 'POST'])
 @login_required
 def add_admin():
-    roles = Role.query.all()
+    roles = Role.query.filter(Role.name != 'Customer').all()
     role_choices = [(r.id, r.name) for r in roles]
     role_choices.insert(0, (0, "Select a Role"))
     form = AdminCreateForm()
@@ -146,3 +152,9 @@ def orders():
 @login_required
 def cancel_order(order_id):
     pass
+
+# General flow for placing orders in context of models
+# 1. The customer data is stored first in db
+# 2. Order object is initialized and added
+# 3. Order Item object is initialized and added
+# 4. commit the changes
