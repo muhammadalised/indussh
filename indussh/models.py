@@ -143,6 +143,7 @@ class Customer(db.Model):
     name = db.Column(db.String(60), nullable=False)
     address = db.Column(db.String(500), nullable=False)
     city = db.Column(db.String(50), nullable=False)
+    country = db.Column(db.String(50), nullable=False)
     postcode = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(50), nullable=False, unique=True)
     phone_number = db.Column(db.String(20))

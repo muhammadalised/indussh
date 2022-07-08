@@ -119,7 +119,8 @@ def delete_admin(admin_id):
 @admin.route('/customers')
 @login_required
 def display_customers():
-    return render_template('admin/customers.html')
+    customers = Customer.query.all()
+    return render_template('admin/customers.html', customers=customers)
 
 @admin.route('/products')
 @login_required

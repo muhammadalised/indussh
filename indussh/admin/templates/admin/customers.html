@@ -21,8 +21,9 @@
                           <th>ID</th>
                           <th>Name</th>
                           <th>Email</th>
-                          <th>Created on</th>
-                          <th>Delete</th>
+                          <th>City</th>
+                          <th>Country</th>
+                          <th>Signed Up</th>
                         </tr>
                       </thead>
                       <tfoot>
@@ -30,20 +31,26 @@
                             <th>ID</th>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Created on</th>
-                            <th>Delete</th>
+                            <th>City</th>
+                            <th>Country</th>
+                            <th>Signed Up</th>
                         </tr>
                       </tfoot>
                       <tbody>
-                        {% for row in user_rows %}
+                        {% for customer in customers %}
                             <tr>
-                                <td>{{ row.id }}</td>
-                                <td>{{ row.name }}</td>
-                                <td>{{ row.email }}</td>
-                                <td>{{ row.register_date }}</td>
-                                <td><a href="#" class="btn btn-danger btn-circle btn-sm">
-                                    <i class="fas fa-trash"></i>
-                                </a></td>
+                                <td>{{ customer.id }}</td>
+                                <td>{{ customer.name }}</td>
+                                <td>{{ customer.email }}</td>
+                                <td>{{ customer.city }}</td>
+                                <td>{{ customer.country }}</td>
+                                <td>
+                                  {% if customer.user_id %}
+                                    Yes
+                                  {% else %}
+                                    No
+                                  {% endif %}
+                                </td>
                             </tr>
                         {% endfor %}
                       </tbody>

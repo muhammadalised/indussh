@@ -39,16 +39,17 @@
                     </tr>
                   </tfoot>
                   <tbody>
-                    {% if orders|length > 0 %}
                       {% for order in orders  %}
-                        <td>order.id</td>
-                        <td>order.amount</td>
-                        <td>order.completed</td>
-                        <td>order.date_created</td>
-                        <td>order.date_completed</td>
-                        <td><a href="#" role="button" class="btn btn-sm btn-primary">Details</a></td>
+                        <tr>
+                          <td>{{ order.id }}</td>
+                          <td>{{ order.amount }}</td>
+                          <td>{% if order.completed %} <span class="text text-success">Completed</span> {% else %} <span class="text text-warning">Pending</span> {% endif %}</td>
+                          <td>{{ order.date_created }}</td>
+                          <td>{{ order.date_completed }}</td>
+                          <td>{{ order.customer.name }}</td>
+                          <td><a href="#" role="button" class="btn btn-sm btn-primary">Details</a></td>
+                        </tr>
                       {% endfor %}
-                    {% endif %}
                   </tbody>
                 </table>
               </div>
