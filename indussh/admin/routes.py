@@ -1,13 +1,10 @@
-from nis import cat
-from unicodedata import category
-from flask import Flask, render_template, redirect, url_for, Blueprint, flash, request, current_app
+from flask import render_template, redirect, url_for, Blueprint, flash, request, current_app
 from flask_login import current_user, login_user, logout_user, login_required
+from sqlalchemy import func
 
 from .forms import AdminCreateForm, AdminLoginForm, ProductAddForm, AdminUpdateForm
 from indussh.models import db, Product, Customer, User, Order, Role
 from indussh.admin.utils import save_picture, clean_text
-
-from sqlalchemy import func
 
 admin = Blueprint('admin', __name__, template_folder='templates')
 
@@ -159,10 +156,14 @@ def add_product():
 
     return render_template('admin/products-add.html', form=form)
 
-@admin.route('/delete-product/<int:product_id>')
+@admin.route('/<int:product_id>/delete-product', methods=['GET', 'POST'])
 @login_required
 def delete_product(product_id):
-    pass
+    product = Product.query.get_or_404(product_id)
+    db.session.delete(product)
+    db.session.commit()
+    flash('Product deleted', 'success')
+    return redirect(url_for('admin.display_products'))
 
 @admin.route('/edit-product/<int:product_id>')
 @login_required
