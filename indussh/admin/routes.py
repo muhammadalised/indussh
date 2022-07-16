@@ -165,10 +165,36 @@ def delete_product(product_id):
     flash('Product deleted', 'success')
     return redirect(url_for('admin.display_products'))
 
-@admin.route('/edit-product/<int:product_id>')
+@admin.route('/<int:product_id>/edit-product', methods=['GET', 'POST'])
 @login_required
 def edit_product(product_id):
-    pass
+    product = Product.query.get_or_404(product_id)
+
+    form = ProductAddForm()
+    if form.validate_on_submit():
+        if form.image_file.data:
+            image_file = save_picture(form.image_file.data, 
+                                        current_app.config['PRODUCT_IMAGES_PATH'],
+                                        current_app.config['PRODUCT_IMAGE_SIZE'])
+            product.image_file = image_file
+
+    elif request.method == 'GET':
+        form.article = product.article_no
+        form.name = product.name
+        form.description = product.description
+        form.type = product.type
+        form.category = product.category
+        form.price = product.price
+        form.min_price = product.minimum_price
+        
+        form.size_s = product.size_sm
+        form.size_m = product.size_md
+        form.size_l = product.size_l
+        form.size_xl = product.size_xl
+
+
+    return render_template('admin/products-add.html', form=form)
+
 
 @admin.route('/orders')
 @login_required

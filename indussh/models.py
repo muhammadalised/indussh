@@ -172,6 +172,7 @@ class Product(db.Model):
     size_xl = db.Column(db.Integer, nullable=False)
     added_on = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
+    # TODO: add updated_on field for storing when the info was edited
     ordered_items = db.relationship('OrderItem', backref='ordered_products')
 
     def __repr__(self):
