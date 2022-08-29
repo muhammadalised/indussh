@@ -1,6 +1,7 @@
 import pickle
 import json
 import random
+import re
 
 import tensorflow as tf
 import numpy as np
@@ -69,7 +70,11 @@ class Chatbot:
         pass
 
     def extract_amount(self, sentence):
-        pass
+        sentence = sentence.lower()
+        # This regular expression will filter out amounts from the sentence like:
+        # rs. 400 or rs400 rs 400
+        amount = re.findall(r'rs\s?\.?([0-9]+\.?[0-9]+)', sentence)[0]
+        return int(amount)
 
     def track_user_offers(self, sentence):
         pass
