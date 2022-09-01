@@ -5,3 +5,7 @@
 - Flask
 - Scikit-Learn
 - Tensorflow
+
+### TODOS
+1. Complete the Edit Product functionality
+2. Integrate the Chatbot
