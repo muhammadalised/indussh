@@ -7,7 +7,7 @@ import nltk
 from nltk.stem.lancaster import LancasterStemmer
 
 
-class Chatbot:
+class ChatBot:
     ERROR_THRESHOLD = 0.50
 
     def __init__(self, model, intents, training_data):
@@ -15,9 +15,9 @@ class Chatbot:
         self.intents = intents
         self.model = model
 
-        self.words = training_data['words']
-        self.documents = training_data['documents']
-        self.classes = training_data['classes']
+        # self.words = training_data['words']
+        # self.documents = training_data['documents']
+        # self.classes = training_data['classes']
 
         self.context = {}
         self.__bot_offers = []
@@ -75,22 +75,34 @@ class Chatbot:
         amount = re.findall(r'rs\s?\.?([0-9]+\.?[0-9]+)', sentence)[0]
         return int(amount)
 
-    def generate_offer(self, min_price, original_price, user_price):
-        if (user_price > min_price) and (user_price <= original_price):
-            print('Done Deal')
-        elif user_price < min_price:
-            # If it's the first user offer and bot hasn't offered yet then
-            if len(self.__user_offers) == 1 and len(self.__bot_offers) == 0:
-                offer = self.compute_offer(min_price, user_price)
-            # If the bot has made any offers then compute the offer relative to the last offer
-            elif len(self.__bot_offers) > 0:
-                offer = self.compute_offer(min_price, self.__bot_offers[-1])
-            elif len(self.__user_offers) > 1:
-                offer = self.compute_offer(min_price, self.__user_offers[-1])
+    def generate_offer(self, min_price, original_price, user_price=None):
 
-            return offer
+        # If the offer isn't made by the user then let the bot generate offer
+        if user_price is None:
+            # If user hasn't made any offer at all then bot will generate the offer b/w min price and original price
+            if len(self.__user_offers) <= 0 and len(self.__bot_offers) <= 0:
+                offer = self.compute_offer_price(min_price, original_price)
+            else:  # The bot will generate the offer amount between minimum price and the last bot offer price
+                offer = self.compute_offer_price(
+                    min_price, self.__user_offers[-1])
+            # keep track of offers made by the bot
+            self.__bot_offers.append(offer)
+        # If the user has made an offer then evaluate it accordingly
+        elif user_price is not None:
+            if (user_price > min_price) and (user_price <= original_price):
+                self.__user_offers.append(user_price)
+                # Return the user price as the offer
+                return user_price
+            elif user_price < min_price:  # if the user price is lesser even then the min price
+                # Append the user offers to keep track of them
+                self.__user_offers.append(user_price)
+                offer = self.compute_offer_price(
+                    min_price, self.__user_offers[-1])
+                self.__bot_offers.append(offer)
 
-    def compute_offer_price(min_price, price):
+        return offer
+
+    def compute_offer_price(self, min_price, price):
         # Compute an offer relative to previous offered price or user offer
         offer = random.randint(min_price, price)
         # Round the offer amount to the nearest 10
