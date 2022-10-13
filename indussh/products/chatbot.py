@@ -20,6 +20,7 @@ class ChatBot:
         # self.classes = training_data['classes']
 
         self.context = {}
+        self.offers_threshold = 5
         self.__bot_offers = []
         self.__user_offers = []
 
