@@ -16,10 +16,10 @@ def dashboard():
     product_count = Product.query.count()
     customer_count = Customer.query.count()
     order_count = Order.query.count()
-    total_sales = Order.query.with_entities(func.sum(Order.amount).label(
-        'total_sales')).filter(Order.completed == True).first().total_sales
+    total_sales = int(Order.query.with_entities(func.sum(Order.amount).label(
+        'total_sales')).filter(Order.completed == True).first().total_sales) if order_count else 0
     avg_order_sale = int(Order.query.with_entities(func.avg(Order.amount).label(
-        'avg_order_sale')).filter(Order.completed == True).first().avg_order_sale)
+        'avg_order_sale')).filter(Order.completed == True).first().avg_order_sale) if order_count else 0
     return render_template('admin/dashboard.html',
                            product_count=product_count,
                            customer_count=customer_count,

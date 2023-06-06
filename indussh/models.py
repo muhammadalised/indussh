@@ -59,6 +59,7 @@ class Role(db.Model):
                 role.add_permission(perm)
             db.session.add(role)
         db.session.commit()
+        print('Roles Created!')
     
     def reset_permissions(self):
         self.permissions = 0
